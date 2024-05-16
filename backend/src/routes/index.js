@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const testeRoutes = require('./testeRoutes');
-
-router.use('/teste', testeRoutes);
+// Importação e definindo o path das rotas
+const salesRoutes = require('./salesRoutes');
+router.use('/sales', salesRoutes);
 
 module.exports = router;
