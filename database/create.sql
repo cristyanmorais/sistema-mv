@@ -33,6 +33,19 @@ CREATE TABLE sales (
     amount NUMERIC(12, 2) NOT NULL,
     work_id INT NOT NULL REFERENCES works (id),
     sale_date DATE NOT NULL,
+    is_installment BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Criação da tabela sales_installments (Parcelas das Vendas)
+CREATE TABLE sales_installments (
+    id SERIAL PRIMARY KEY,
+    sale_id INT NOT NULL REFERENCES sales (id),
+    installment_amount NUMERIC(12, 2) NOT NULL,
+    due_date DATE NOT NULL,
+    paid BOOLEAN DEFAULT FALSE,
+    payment_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

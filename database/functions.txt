@@ -1,23 +1,39 @@
 -- Função para enviar alertas
-CREATE OR REPLACE FUNCTION send_alert(purchase_id INT, installment_due_date DATE) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION send_alert(transaction_type TEXT, transaction_id INT, installment_due_date DATE) RETURNS VOID AS $$
 BEGIN
     -- Implementar a lógica de envio de alerta (ex: envio de email, criação de notificação, etc.)
-    RAISE NOTICE 'Alerta: Parcela da compra % vence em %', purchase_id, installment_due_date;
+    RAISE NOTICE 'Alerta: Parcela da % % vence em %', transaction_type, transaction_id, installment_due_date;
 END;
 $$ LANGUAGE plpgsql;
 
--- Função para processar parcelas vencidas
+-- Função para processar parcelas vencidas de compras
 CREATE OR REPLACE FUNCTION check_installment_due() RETURNS TRIGGER AS $$
 BEGIN
     IF NEW.due_date = CURRENT_DATE AND NEW.paid = FALSE THEN
-        PERFORM send_alert(NEW.purchase_id, NEW.due_date);
+        PERFORM send_alert('compra', NEW.purchase_id, NEW.due_date);
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Trigger para verificar parcelas vencidas
+-- Trigger para verificar parcelas vencidas de compras
 CREATE TRIGGER trigger_check_installment_due
 AFTER INSERT OR UPDATE ON purchase_installments
 FOR EACH ROW
 EXECUTE FUNCTION check_installment_due();
+
+-- Função para processar parcelas vencidas de vendas
+CREATE OR REPLACE FUNCTION check_sale_installment_due() RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.due_date = CURRENT_DATE AND NEW.paid = FALSE THEN
+        PERFORM send_alert('venda', NEW.sale_id, NEW.due_date);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger para verificar parcelas vencidas de vendas
+CREATE TRIGGER trigger_check_sale_installment_due
+AFTER INSERT OR UPDATE ON sales_installments
+FOR EACH ROW
+EXECUTE FUNCTION check_sale_installment_due();
