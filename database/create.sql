@@ -92,3 +92,18 @@ CREATE TABLE contracted_services (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+create table taxes_type(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR NOT NULL
+);
+
+create table taxes(
+	id SERIAL PRIMARY KEY,
+	amount NUMERIC(12, 2) NOT NULL,
+    tax_date DATE DEFAULT CURRENT_TIMESTAMP,
+	taxes_type_id INT NOT NULL REFERENCES taxes_type (id)
+);
+
+insert into taxes_type (name)
+values ('PIS'), ('COFINS'), ('IR'), ('CSLL'), ('FGTS'), ('INSS');
