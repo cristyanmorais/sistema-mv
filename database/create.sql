@@ -24,7 +24,8 @@ CREATE TABLE companies (
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    contact_info TEXT
+    telephone varchar,
+    email varchar
 );
 
 -- Criação da tabela sales (Vendas)
