@@ -17,4 +17,19 @@ router.use('/purchases', purchasesRoutes);
 const clientsRoutes = require('./clientsRoutes');
 router.use('/clients', clientsRoutes);
 
+const providedServicesRoutes = require('./providedServicesRoutes');
+router.use('/provided-services', providedServicesRoutes);
+
+const employeesRoutes = require('./employeesRoutes');
+router.use('/employees', employeesRoutes);
+
+const contractedServicesRoutes = require('./contractedServicesRoutes');
+router.use('/contracted-services', contractedServicesRoutes);
+
+const payrollRoutes = require('./payrollRoutes');
+router.use('/payroll', payrollRoutes);
+
+const taxesRoutes = require('./taxesRoutes');
+router.use('/taxes', taxesRoutes);
+
 module.exports = router;

@@ -48,7 +48,7 @@ exports.createClient = async (req, res) => {
 exports.updateClient = async (req, res) => {
     const id = req.params.id;
     const { name } = req.body;
-    const query = 'UPDATE companies SET name = $1 WHERE id = $2;';
+    const query = 'UPDATE clients SET name = $1 WHERE id = $2;';
     const values = [name, id];
     try {
         result = await db.query(query, values);
