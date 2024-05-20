@@ -32,4 +32,10 @@ router.use('/payroll', payrollRoutes);
 const taxesRoutes = require('./taxesRoutes');
 router.use('/taxes', taxesRoutes);
 
+const salesInstallmentsRoutes = require('./salesInstallmentsRoutes');
+router.use('/sales-installments', salesInstallmentsRoutes);
+
+const purchasesInstallmentsRoutes = require('./purchasesInstallmentsRoutes');
+router.use('/purchases-installments', purchasesInstallmentsRoutes);
+
 module.exports = router;

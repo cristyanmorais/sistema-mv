@@ -64,7 +64,7 @@ CREATE TABLE purchases (
 );
 
 -- Criação da tabela purchase_installments (Parcelas das Compras)
-CREATE TABLE purchase_installments (
+CREATE TABLE purchases_installments (
     id SERIAL PRIMARY KEY,
     purchase_id INT NOT NULL REFERENCES purchases (id),
     installment_amount NUMERIC(12, 2) NOT NULL,
