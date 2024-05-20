@@ -9,7 +9,9 @@ const Sales = () => {
     const [installment, setInstallment] = useState(false);
 
     const [works, setWorks] = useState([]);
+
     const [installmentDate, setInstallmentDate] = useState();
+    const [installmentAmount, setInstallmentAmount] = useState(0);
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/works')
@@ -31,7 +33,7 @@ const Sales = () => {
 
     const handleConfirm = () => {
         // Verifica se há algum campo vazio
-        if (workId === 0 || amount === 0 || date === undefined || (installment === true && installmentDate === undefined)) {
+        if (workId === 0 || amount === 0 || date === undefined || (installment === true && (installmentDate === undefined || installmentAmount === 0))) {
             console.log("num pode");
         } else {
             const data = {
@@ -44,6 +46,8 @@ const Sales = () => {
             axios.post('http://localhost:3000/api/sales', data)
             .then(response => {
                 console.log("Data succefully sent: ", response.data);
+
+                if (installment) handleInstallment(response.data.id);
             })
             .catch(error => {
                 console.error("Error while sending data: ", error);
@@ -51,6 +55,23 @@ const Sales = () => {
         }
 
         // console.log("work id: " + workId + "\namount: " + amount + "\ndate: " + date + "\ninstallment: " + installment);
+    }
+
+    const handleInstallment = (saleId) => {
+        const data = {
+            sale_id: saleId,
+            installment_amount: installmentAmount,
+            due_date: installmentDate,
+            paid: false
+        }
+
+        axios.post('http://localhost:3000/api/sales-installments', data)
+        .then(response => {
+            console.log("Data succefully sent: ", response.data);
+        })
+        .catch(error => {
+            console.error("Error while sending data: ", error);
+        })
     }
     
     const Body = styled.div`
@@ -91,8 +112,14 @@ const Sales = () => {
 
             {installment ? 
             <div>
-                <label>Data da primeira parcela:</label>
-                <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
+                <div>
+                    <label>Data da primeira parcela:</label>
+                    <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
+                </div>
+                <div>
+                    <label>Valor da primeira parcela:</label>
+                    <input type='number' value={installmentAmount} onChange={e => setInstallmentAmount(e.target.value)}/>
+                </div>
             </div> 
             : null}
 

@@ -27,7 +27,7 @@ exports.getSaleById = async (req, res) => {
 
 exports.createSale = async (req, res) => {
     const { work_id, amount, sale_date, is_installment } = req.body;
-    const query = 'INSERT INTO sales (work_id, amount, sale_date, is_installment) VALUES ($1, $2, $3, $4);';
+    const query = 'INSERT INTO sales (work_id, amount, sale_date, is_installment) VALUES ($1, $2, $3, $4) RETURNING id;';
     const values = [work_id, amount, sale_date, is_installment];
     try {
         result = await db.query(query, values);
@@ -37,7 +37,11 @@ exports.createSale = async (req, res) => {
             return res.status(500).json({ error: 'Error while inserting Work.' });
         }
 
-        res.status(201).json({ message: 'Sale created!' });
+        const saleId = result.rows[0].id;
+
+        // console.log(result.rows[0]);
+
+        res.status(201).json({ message: 'Sale created!', id: saleId});
 
     } catch (err) {
         res.status(500).send(err.message);
