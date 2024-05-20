@@ -1,10 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Sales = () => {
     const [workId, setWorkId] = useState(0);
     const [amount, setAmount] = useState(0);
     const [date, setDate] = useState();
+    const [installment, setInstallment] = useState(false);
+
+    const [works, setWorks] = useState([]);
+    const [installmentDate, setInstallmentDate] = useState();
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/works')
+        .then(response => setWorks(response.data))
+        .catch(error => console.error('Error: ', error));
+      }, []);
+    
+    // useEffect(() => {
+    //   console.log(date);
+    // }, [date]);
+
+    const checkHandler = () => {
+        setInstallment(!installment);
+    };
+
+    const handleWorkChange = (e) => {
+        setWorkId(e.target.value);
+    }
+
+    const handleConfirm = () => {
+        // Verifica se há algum campo vazio
+        if (workId === 0 || amount === 0 || date === undefined || (installment === true && installmentDate === undefined)) {
+            console.log("num pode");
+        } else {
+            const data = {
+                work_id: workId,
+                amount,
+                sale_date: date,
+                is_installment: installment
+            }
+            
+            axios.post('http://localhost:3000/api/sales', data)
+            .then(response => {
+                console.log("Data succefully sent: ", response.data);
+            })
+            .catch(error => {
+                console.error("Error while sending data: ", error);
+            })
+        }
+
+        // console.log("work id: " + workId + "\namount: " + amount + "\ndate: " + date + "\ninstallment: " + installment);
+    }
     
     const Body = styled.div`
         background-color: lightgreen;
@@ -14,23 +61,43 @@ const Sales = () => {
 
         display: flex;
         flex-direction: column;
-    `
+    `;
 
     return (
         <Body>
             <div>
                 <label>Obra:</label>
-                <select>
-                
+                <select value={workId} onChange={handleWorkChange}>
+                    <option value={0} disabled>Selecione uma obra</option>
+                    {works.map(work => (
+                        <option key={work.id} value={work.id}>
+                            {work.name}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div>
                 <label>Preço:</label>
-                <input type='number' />
+                <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
             <div>
                 <label>Data:</label>
-                <input type='number' />
+                <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
+            </div>
+            <div>
+                <label>Parcelado:</label>
+                <input type='checkbox' checked={installment} onChange={e => checkHandler()}/>
+            </div>
+
+            {installment ? 
+            <div>
+                <label>Data da primeira parcela:</label>
+                <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
+            </div> 
+            : null}
+
+            <div>
+                <button onClick={handleConfirm}>Confirmar</button>
             </div>
         </Body>
     );
