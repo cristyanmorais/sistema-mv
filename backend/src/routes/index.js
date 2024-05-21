@@ -32,6 +32,9 @@ router.use('/payroll', payrollRoutes);
 const taxesRoutes = require('./taxesRoutes');
 router.use('/taxes', taxesRoutes);
 
+const taxesTypeRoutes = require('./taxesTypeRoutes');
+router.use('/taxes-type', taxesTypeRoutes);
+
 const salesInstallmentsRoutes = require('./salesInstallmentsRoutes');
 router.use('/sales-installments', salesInstallmentsRoutes);
 
