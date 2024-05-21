@@ -2,26 +2,55 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
+// CSS
+const Body = styled.div`
+        background-color: lightgreen;
+        width: 1000px;
+        margin: auto;
+        margin-top: 50px;
+
+        display: flex;
+        flex-direction: column;
+    `;
+
 const Sales = () => {
     const [workId, setWorkId] = useState(0);
-    const [amount, setAmount] = useState(0);
-    const [date, setDate] = useState();
+    const [amount, setAmount] = useState('');
+    const [date, setDate] = useState('');
     const [installment, setInstallment] = useState(false);
 
     const [works, setWorks] = useState([]);
 
-    const [installmentDate, setInstallmentDate] = useState();
-    const [installmentAmount, setInstallmentAmount] = useState(0);
+    const [installmentDate, setInstallmentDate] = useState('');
+    const [installmentAmount, setInstallmentAmount] = useState('');
+
+    const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:3000/api/works')
         .then(response => setWorks(response.data))
         .catch(error => console.error('Error: ', error));
-      }, []);
-    
-    // useEffect(() => {
-    //   console.log(date);
-    // }, [date]);
+    }, []);
+
+    useEffect(() => {
+        const amountNumber = parseFloat(amount);
+        const installmentAmountNumber = parseFloat(installmentAmount);
+
+        if (installment) {
+            if (workId > 0 && amountNumber > 0 && date !== '' && installmentDate !== '' && installmentAmountNumber < amountNumber && installmentAmountNumber > 0) {
+                setFilledFields(true);
+            } else {
+                setFilledFields(false);
+            }
+        } else {
+            if (workId > 0 && amount > 0 && date !== '') {
+                setFilledFields(true);
+            } else {
+                setFilledFields(false);
+            }
+        }
+
+    }, [workId, amount, date, installment, installmentDate, installmentAmount])
 
     const checkHandler = () => {
         setInstallment(!installment);
@@ -31,14 +60,19 @@ const Sales = () => {
         setWorkId(e.target.value);
     }
 
+    const clearFields = () => {
+        setWorkId(0);
+        setAmount('');
+        setDate('');
+        setInstallment(false);
+        setInstallmentAmount('');
+        setInstallmentDate('');
+    }
+
     const handleConfirm = () => {
-        // Verifica se há algum campo vazio
-        if (workId === 0 || amount === 0 || date === undefined || (installment === true && (installmentDate === undefined || installmentAmount === 0))) {
-            console.log("num pode");
-        } else {
             const data = {
                 work_id: workId,
-                amount,
+                amount: Number(amount),
                 sale_date: date,
                 is_installment: installment
             }
@@ -48,19 +82,18 @@ const Sales = () => {
                 console.log("Data succefully sent: ", response.data);
 
                 if (installment) handleInstallment(response.data.id);
+
+                clearFields();
             })
             .catch(error => {
                 console.error("Error while sending data: ", error);
             })
-        }
-
-        // console.log("work id: " + workId + "\namount: " + amount + "\ndate: " + date + "\ninstallment: " + installment);
     }
 
     const handleInstallment = (saleId) => {
         const data = {
             sale_id: saleId,
-            installment_amount: installmentAmount,
+            installment_amount: Number(installmentAmount),
             due_date: installmentDate,
             paid: false
         }
@@ -73,16 +106,6 @@ const Sales = () => {
             console.error("Error while sending data: ", error);
         })
     }
-    
-    const Body = styled.div`
-        background-color: lightgreen;
-        width: 1000px;
-        margin: auto;
-        margin-top: 50px;
-
-        display: flex;
-        flex-direction: column;
-    `;
 
     return (
         <Body>
@@ -99,7 +122,7 @@ const Sales = () => {
             </div>
             <div>
                 <label>Preço:</label>
-                <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
+                <input key="random1" value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
             <div>
                 <label>Data:</label>
@@ -124,7 +147,7 @@ const Sales = () => {
             : null}
 
             <div>
-                <button onClick={handleConfirm}>Confirmar</button>
+                <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
             </div>
         </Body>
     );
