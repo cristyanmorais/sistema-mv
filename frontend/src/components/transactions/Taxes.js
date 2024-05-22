@@ -31,13 +31,13 @@ const Taxes = () => {
     useEffect(() => {
         const amountNumber = parseFloat(amount);
 
-        if (taxTypeId > 0 && amount > 0 && date !== '') {
+        if (taxTypeId > 0 && amountNumber > 0 && date !== '') {
             setFilledFields(true);
         } else {
             setFilledFields(false);
         }
 
-    }, [taxTypeId, amount, date])
+    }, [taxTypeId, amount, date]);
 
     const handleTaxTypeChange = (e) => {
         setTaxTypeId(e.target.value);
@@ -82,7 +82,7 @@ const Taxes = () => {
             </div>
             <div>
                 <label>Preço:</label>
-                <input key="random1" value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
+                <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
             <div>
                 <label>Data:</label>

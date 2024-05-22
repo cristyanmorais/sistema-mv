@@ -1,8 +1,105 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+// CSS
+const Body = styled.div`
+        background-color: lightgreen;
+        width: 1000px;
+        margin: auto;
+        margin-top: 50px;
+
+        display: flex;
+        flex-direction: column;
+    `;
 
 const ContractedServices = () => {
+    const [employeeId, setEmployeeId] = useState(0);
+    const [amount, setAmount] = useState('');
+    const [date, setDate] = useState('');
+    const [description, setDescription] = useState('');
+
+    const [employees, setEmployees] = useState([]);
+
+    const [filledFields, setFilledFields] = useState(false);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/api/employees')
+        .then(response => setEmployees(response.data))
+        .catch(error => console.error('Error: ', error));
+    }, []);
+
+    useEffect(() => {
+        const amountNumber = parseFloat(amount);
+
+        if (employeeId > 0 && amountNumber > 0 && date !== '' && description !== '') {
+            setFilledFields(true);
+        } else {
+            setFilledFields(false);
+        }
+
+    }, [employeeId, amount, date, description]);
+
+    const handleEmployeeChange = (e) => {
+        setEmployeeId(e.target.value);
+    }
+
+    const clearFields = () => {
+        setEmployeeId(0);
+        setAmount('');
+        setDate('');
+        setDescription('');
+    }
+
+    const handleConfirm = () => {
+        const data = {
+            employee_id: employeeId,
+            amount: Number(amount),
+            service_date: date,
+            description
+        }
+        
+        axios.post('http://localhost:3000/api/contracted-services', data)
+        .then(response => {
+            console.log("Data succefully sent: ", response.data);
+
+            clearFields();
+        })
+        .catch(error => {
+            console.error("Error while sending data: ", error);
+        })
+    }
+
     return (
-        <div>ContractedServices component</div>
+        <Body>
+            <div>
+                <label>Selecione um contratado:</label>
+                <select value={employeeId} onChange={handleEmployeeChange}>
+                    <option value={0} disabled>Selecione um contratado:</option>
+                    {employees.map(employee => (
+                        <option key={employee.id} value={employee.id}>
+                            {employee.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <label>Preço:</label>
+                <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
+            </div>
+            <div>
+                <label>Data:</label>
+                <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
+            </div>
+            <div>
+                <label>Descrição:</label>
+                <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
+            </div>
+
+            <div>
+                <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
+            </div>
+        </Body>
     );
 }
 

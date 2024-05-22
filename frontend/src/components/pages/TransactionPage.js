@@ -57,7 +57,7 @@ const TransactionPage = () => {
                 <TransactionType>
                     <label>Tipo de Transação:</label>
                     <select value={selectedType} onChange={e => setSelectedType(e.target.value)}>
-                        <option value="null"></option>
+                        <option value={0}>Selecione uma transação</option>
                         <option value="sales">Venda</option>
                         <option value="purchases">Compra</option>
                         <option value="taxes">Imposto</option>

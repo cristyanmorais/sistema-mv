@@ -122,7 +122,7 @@ const Sales = () => {
             </div>
             <div>
                 <label>Preço:</label>
-                <input key="random1" value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
+                <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
             <div>
                 <label>Data:</label>
