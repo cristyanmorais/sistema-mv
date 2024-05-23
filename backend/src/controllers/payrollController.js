@@ -27,9 +27,9 @@ exports.getPayrollById = async (req, res) => {
 
 // Adicionar Telefone e Email caso necesário
 exports.createPayroll = async (req, res) => {
-    const { employee_id, amount, payroll_date } = req.body;
-    const query = 'INSERT INTO payroll (employee_id, amount, payroll_date) VALUES ($1, $2, $3);';
-    const values = [employee_id, amount, payroll_date];
+    const { amount, payroll_date } = req.body;
+    const query = 'INSERT INTO payroll (amount, payroll_date) VALUES ($1, $2);';
+    const values = [amount, payroll_date];
     try {
         result = await db.query(query, values);
 
@@ -47,9 +47,9 @@ exports.createPayroll = async (req, res) => {
 
 exports.updatePayroll = async (req, res) => {
     const id = req.params.id;
-    const { employee_id, amount, payroll_date } = req.body;
-    const query = 'UPDATE payroll SET employee_id = $1, amount = $2, payroll_date = $3 WHERE id = $2;';
-    const values = [employee_id, amount, payroll_date, id];
+    const { amount, payroll_date } = req.body;
+    const query = 'UPDATE payroll SET amount = $1, payroll_date = $2 WHERE id = $3;';
+    const values = [ amount, payroll_date, id];
     try {
         result = await db.query(query, values);
 

@@ -79,7 +79,6 @@ CREATE TABLE purchases_installments (
 CREATE TABLE payroll (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
-    employee_id INT NOT NULL REFERENCES employees (id),
     payroll_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
