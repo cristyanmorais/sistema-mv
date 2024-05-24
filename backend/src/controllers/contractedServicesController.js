@@ -27,7 +27,7 @@ exports.getContractedServiceById = async (req, res) => {
 
 exports.createContractedService = async (req, res) => {
     const { employee_id, amount, description, service_date } = req.body;
-    const query = 'INSERT INTO contracted_services (employee_id, amount, description, service_date) VALUES ($1, $2, $3, $4);';
+    const query = 'INSERT INTO contracted_services (employee_id, amount, description, service_date) VALUES ($1, $2, $3, $4) RETURNING id;';
     const values = [employee_id, amount, description, service_date];
     try {
         result = await db.query(query, values);
@@ -37,7 +37,9 @@ exports.createContractedService = async (req, res) => {
             return res.status(500).json({ error: 'Error while inserting Contracted Service.' });
         }
 
-        res.status(201).json({ message: 'Contracted Service created!' });
+        const contractedServiceId = result.rows[0].id;
+
+        res.status(201).json({ message: 'Contracted Service created!', id: contractedServiceId });
 
     } catch (err) {
         res.status(500).send(err.message);

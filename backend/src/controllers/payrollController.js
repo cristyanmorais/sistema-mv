@@ -28,7 +28,7 @@ exports.getPayrollById = async (req, res) => {
 // Adicionar Telefone e Email caso necesário
 exports.createPayroll = async (req, res) => {
     const { amount, payroll_date } = req.body;
-    const query = 'INSERT INTO payroll (amount, payroll_date) VALUES ($1, $2);';
+    const query = 'INSERT INTO payroll (amount, payroll_date) VALUES ($1, $2) RETURNING id;';
     const values = [amount, payroll_date];
     try {
         result = await db.query(query, values);
@@ -38,7 +38,9 @@ exports.createPayroll = async (req, res) => {
             return res.status(500).json({ error: 'Error while inserting Payroll.' });
         }
 
-        res.status(201).json({ message: 'Payroll created!' });
+        const payrollId = result.rows[0].id;
+
+        res.status(201).json({ message: 'Payroll created!', id: payrollId });
 
     } catch (err) {
         res.status(500).send(err.message);

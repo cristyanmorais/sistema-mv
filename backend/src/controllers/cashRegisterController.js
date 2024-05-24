@@ -26,11 +26,24 @@ exports.getCashRegisterById = async (req, res) => {
 }
 
 exports.createCashRegister = async (req, res) => {
-    const { transaction_type, transaction_id, transaction_date, amount, balance } = req.body;
-    const query = 'INSERT INTO cash_register (transaction_type, transaction_id, transaction_date, amount, balance) VALUES ($1, $2, $3, $4, $5);';
-    const values = [transaction_type, transaction_id, transaction_date, amount, balance];
+    const { transaction_type, transaction_id, transaction_date, amount } = req.body;
     try {
-        result = await db.query(query, values);
+        // Obter o saldo anterior
+        const lastBalance = await getLastBalance();
+
+        // Calcular o novo saldo
+        let balance;
+        if (transaction_type === "contracted-services" || transaction_type === "payroll" || transaction_type === "purchases" || transaction_type === "taxes") {
+            balance = lastBalance - amount; // Despesa
+        } else {
+            balance = lastBalance + amount; // Receita
+        }
+
+        // Inserir a nova transação com o saldo atualizado
+        const query = 'INSERT INTO cash_register (transaction_type, transaction_id, transaction_date, amount, balance) VALUES ($1, $2, $3, $4, $5)';
+        const values = [transaction_type, transaction_id, transaction_date, amount, balance];
+        
+        const result = await db.query(query, values);
 
         if (result.rowCount !== 1) {
             console.error('Error while inserting Cash Register.');
@@ -42,7 +55,7 @@ exports.createCashRegister = async (req, res) => {
     } catch (err) {
         res.status(500).send(err.message);
     }
-}
+};
 
 exports.updateCashRegister = async (req, res) => {
     const id = req.params.id;
@@ -63,3 +76,12 @@ exports.updateCashRegister = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+const getLastBalance = async () => {
+    const result = await db.query('SELECT balance FROM cash_register ORDER BY id DESC LIMIT 1');
+    if (result.rows.length > 0) {
+        return result.rows[0].balance;
+    }
+
+    return 0; // Se não houver registros, o saldo inicial é 0
+};

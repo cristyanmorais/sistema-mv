@@ -27,7 +27,7 @@ exports.getProvidedServiceById = async (req, res) => {
 
 exports.createProvidedService = async (req, res) => {
     const { client_id, amount, description, service_date } = req.body;
-    const query = 'INSERT INTO provided_services (client_id, amount, description, service_date) VALUES ($1, $2, $3, $4);';
+    const query = 'INSERT INTO provided_services (client_id, amount, description, service_date) VALUES ($1, $2, $3, $4) RETURNING id;';
     const values = [client_id, amount, description, service_date];
     try {
         result = await db.query(query, values);
@@ -37,7 +37,9 @@ exports.createProvidedService = async (req, res) => {
             return res.status(500).json({ error: 'Error while inserting Provided Service.' });
         }
 
-        res.status(201).json({ message: 'Provided Service created!' });
+        const providedServiceId = result.rows[0].id;
+
+        res.status(201).json({ message: 'Provided Service created!', id: providedServiceId });
 
     } catch (err) {
         res.status(500).send(err.message);

@@ -27,7 +27,7 @@ exports.getTaxById = async (req, res) => {
 
 exports.createTax = async (req, res) => {
     const { taxes_type_id, amount, tax_date } = req.body;
-    const query = 'INSERT INTO taxes (taxes_type_id, amount, tax_date) VALUES ($1, $2, $3);';
+    const query = 'INSERT INTO taxes (taxes_type_id, amount, tax_date) VALUES ($1, $2, $3) RETURNING id;';
     const values = [taxes_type_id, amount, tax_date];
     try {
         result = await db.query(query, values);
@@ -37,7 +37,9 @@ exports.createTax = async (req, res) => {
             return res.status(500).json({ error: 'Error while inserting Tax.' });
         }
 
-        res.status(201).json({ message: 'Tax created!' });
+        const taxId = result.rows[0].id;
+
+        res.status(201).json({ message: 'Tax created!', id: taxId });
 
     } catch (err) {
         res.status(500).send(err.message);
