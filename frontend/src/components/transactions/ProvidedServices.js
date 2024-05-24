@@ -58,16 +58,37 @@ const ProvidedServices = () => {
             service_date: date,
             description
         }
-        
-        axios.post('http://localhost:3000/api/provided-services', data)
-        .then(response => {
-            console.log("Data succefully sent: ", response.data);
 
-            clearFields();
-        })
-        .catch(error => {
-            console.error("Error while sending data: ", error);
-        })
+        const sendTaxesData = (data) => {
+            return axios.post('http://localhost:3000/api/provided-services', data);
+        };
+        
+        const sendOtherData = (otherData) => {
+            return axios.post('http://localhost:3000/api/cash-register', otherData);
+        };
+        
+        sendTaxesData(data)
+            .then(response => {
+                console.log("Data successfully sent: ", response.data);
+
+                const otherData = {
+                    transaction_type: "provided_services",
+                    transaction_id: response.data.id,
+                    transaction_date: date,
+                    amount: Number(amount)
+                }
+        
+                // Chama a segunda função axios aqui
+                return sendOtherData(otherData);
+            })
+            .then(response => {
+                console.log("Second request successfully sent: ", response.data);
+        
+                clearFields();
+            })
+            .catch(error => {
+                console.error("Error while sending data: ", error);
+            });
     }
 
     return (

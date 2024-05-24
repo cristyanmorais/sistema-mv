@@ -30,13 +30,16 @@ exports.createCashRegister = async (req, res) => {
     try {
         // Obter o saldo anterior
         const lastBalance = await getLastBalance();
+        // console.log("Last Balance: " + lastBalance);
 
         // Calcular o novo saldo
         let balance;
-        if (transaction_type === "contracted-services" || transaction_type === "payroll" || transaction_type === "purchases" || transaction_type === "taxes") {
+        if (transaction_type === "contracted_services" || transaction_type === "payroll" || transaction_type === "purchases" || transaction_type === "taxes") {
             balance = lastBalance - amount; // Despesa
+            // console.log("- Balance: " + balance);
         } else {
-            balance = lastBalance + amount; // Receita
+            balance = Number(lastBalance) + Number(amount); // Receita
+            // console.log("+ Balance: " + balance);
         }
 
         // Inserir a nova transação com o saldo atualizado
