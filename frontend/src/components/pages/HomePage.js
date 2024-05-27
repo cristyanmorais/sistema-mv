@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
 
 import Layout from '../Layout'
+import axios from "axios";
+
+const Body = styled.div`
+    
+`
 
 const HomePage = () => {
+    const [balance, setBalance] = useState(0);
 
-    const Body = styled.div`
-        // background-color: darkred;
-        // height: 900px;
-    `
+    useEffect(() => {
+        fetchBalance();
+    }, []);
+
+    const fetchBalance = () => {
+        axios.get('http://localhost:3000/api/cash-register')
+        .then(response => setBalance(response.data[0].balance))
+        .catch(error => console.error('Error: ', error));
+    }
 
     return (
         <Layout>
             <Body>
                 <p>homepage</p>
-                <NavLink to="/transaction">go to transactions</NavLink>
+                <p>Saldo: {balance}</p>
             </Body>
         </Layout>
     );

@@ -23,7 +23,7 @@ const Menu = () => {
             <NavLink to="/" className="link">home</NavLink>
         </div>
         <div>
-            <NavLink to="/transaction" className="link">transactions</NavLink>
+            <NavLink to="/transaction" className="link">transações</NavLink>
         </div>
         <div>
             <NavLink to="/installments" className="link">parcelas</NavLink>

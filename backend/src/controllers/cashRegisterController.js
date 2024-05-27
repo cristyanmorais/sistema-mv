@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllCashRegisters = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM cash_register');
+        const result = await db.query('SELECT * FROM cash_register ORDER BY id desc');
         res.json(result.rows);
 
     } catch (err) {
