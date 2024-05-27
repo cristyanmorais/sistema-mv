@@ -13,7 +13,7 @@ const Header = () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 50px;
+        // margin-bottom: 50px;
     `;
 
     const Img = styled.img`

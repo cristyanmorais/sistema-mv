@@ -32,10 +32,10 @@ const Installment = () => {
     useEffect(() => {
         if (installmentId) {
             if (isSale === true) {
-                fetchSaleInstallment();
+                fetchSaleInstallment(transactionId);
                 fetchSale(transactionId);
             } else {
-                fetchPurchaseInstallment();
+                fetchPurchaseInstallment(transactionId);
                 fetchPurchase(transactionId);
             }
         }
@@ -76,10 +76,12 @@ const Installment = () => {
         .catch(error => console.error('Error: ', error));
     }
 
-    const fetchPurchase = () => {
-        axios.get(`http://localhost:3000/api/purchase/${saleId}`)
+    const fetchPurchase = (id) => {
+        console.log("fetchPurchase");
+        axios.get(`http://localhost:3000/api/purchases/${id}`)
         .then(response => {
             setTransaction(response.data);
+            console.log(response.data);
         })
         .catch(error => console.error('Error: ', error));
     }
