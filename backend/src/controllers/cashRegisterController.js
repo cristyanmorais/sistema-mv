@@ -25,6 +25,32 @@ exports.getCashRegisterById = async (req, res) => {
     }
 }
 
+exports.getCashRegisterTransactions = async (req, res) => {
+    try {
+        let negative = 0;
+        let positive = 0;
+        const result = await db.query('SELECT * FROM cash_register');
+
+        for (row in result.rows) {
+            if (result.rows[row].transaction_type === "contracted_services" || result.rows[row].transaction_type === "payroll" || result.rows[row].transaction_type === "purchases" || result.rows[row].transaction_type === "taxes") {
+                negative += Number(result.rows[row].amount);
+            } else {
+                positive += Number(result.rows[row].amount);
+            }
+        }
+
+        const json = {
+            "negative": negative,
+            "positive": positive
+        }
+
+        res.json(json);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+}
+
 exports.createCashRegister = async (req, res) => {
     const { transaction_type, transaction_id, transaction_date, amount } = req.body;
     try {
