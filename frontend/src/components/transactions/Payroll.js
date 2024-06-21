@@ -1,17 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components';
-
-// CSS
-const Body = styled.div`
-        background-color: lightgreen;
-        width: 1000px;
-        margin: auto;
-        margin-top: 50px;
-
-        display: flex;
-        flex-direction: column;
-    `;
+import { Body } from '../Teste';
 
 const Payroll = () => {
     const [amount, setAmount] = useState('');
@@ -75,16 +64,16 @@ const Payroll = () => {
 
     return (
         <Body>
-            <div>
+            <div className='field'>
                 <label>Preço:</label>
                 <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
-            <div>
+            <div className='field'>
                 <label>Data:</label>
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
             </div>
 
-            <div>
+            <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
             </div>
         </Body>

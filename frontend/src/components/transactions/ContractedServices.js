@@ -1,17 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-
-// CSS
-const Body = styled.div`
-        background-color: lightgreen;
-        width: 1000px;
-        margin: auto;
-        margin-top: 50px;
-
-        display: flex;
-        flex-direction: column;
-    `;
+import { Body } from '../Teste';
 
 const ContractedServices = () => {
     const [employeeId, setEmployeeId] = useState(0);
@@ -93,7 +82,7 @@ const ContractedServices = () => {
 
     return (
         <Body>
-            <div>
+            <div className='field'>
                 <label>Selecione um contratado:</label>
                 <select value={employeeId} onChange={handleEmployeeChange}>
                     <option value={0} disabled>Selecione um contratado:</option>
@@ -104,20 +93,20 @@ const ContractedServices = () => {
                     ))}
                 </select>
             </div>
-            <div>
+            <div className='field'>
                 <label>Preço:</label>
                 <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
-            <div>
+            <div className='field'>
                 <label>Data:</label>
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
             </div>
-            <div>
+            <div className='field'>
                 <label>Descrição:</label>
                 <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
             </div>
 
-            <div>
+            <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
             </div>
         </Body>

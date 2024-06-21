@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import axios from 'axios';
-
-// CSS
-const Body = styled.div`
-        background-color: lightgreen;
-        width: 1000px;
-        margin: auto;
-        margin-top: 50px;
-
-        display: flex;
-        flex-direction: column;
-    `;
+import { Body } from '../Teste';
 
 const Sales = () => {
     const [workId, setWorkId] = useState(0);
@@ -109,7 +98,7 @@ const Sales = () => {
 
     return (
         <Body>
-            <div>
+            <div className='field'>
                 <label>Obra:</label>
                 <select value={workId} onChange={handleWorkChange}>
                     <option value={0} disabled>Selecione uma obra</option>
@@ -120,33 +109,34 @@ const Sales = () => {
                     ))}
                 </select>
             </div>
-            <div>
+            <div className='field'>
                 <label>Preço:</label>
                 <input value={amount} type='number' onChange={e => setAmount(e.target.value)}/>
             </div>
-            <div>
+            <div className='field'>
                 <label>Data:</label>
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
             </div>
-            <div>
+            <div className='field'>
                 <label>Parcelado:</label>
-                <input type='checkbox' checked={installment} onChange={e => checkHandler()}/>
+                <input id='checkbox' type='checkbox' checked={installment} onChange={(e) => setInstallment(e.target.checked)}/>
+                <label htmlFor="checkbox" className="checkbox-custom"></label>
             </div>
 
             {installment ? 
-            <div>
-                <div>
+            <div className='installment-field'>
+                <div className='field'>
                     <label>Data da primeira parcela:</label>
                     <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
                 </div>
-                <div>
+                <div className='field'>
                     <label>Valor da primeira parcela:</label>
                     <input type='number' value={installmentAmount} onChange={e => setInstallmentAmount(e.target.value)}/>
                 </div>
             </div> 
             : null}
 
-            <div>
+            <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
             </div>
         </Body>

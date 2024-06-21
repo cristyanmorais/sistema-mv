@@ -10,7 +10,7 @@ import ContractedServices from "../transactions/ContractedServices";
 import Taxes from "../transactions/Taxes";
 
 const Body = styled.div`
-        background-color: lightblue;
+        // background-color: lightblue;
         width: 80%;
         // height: 900px;
 
