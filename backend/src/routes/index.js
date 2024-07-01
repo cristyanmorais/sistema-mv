@@ -35,11 +35,8 @@ router.use('/taxes', taxesRoutes);
 const taxesTypeRoutes = require('./taxesTypeRoutes');
 router.use('/taxes-type', taxesTypeRoutes);
 
-const salesInstallmentsRoutes = require('./salesInstallmentsRoutes');
-router.use('/sales-installments', salesInstallmentsRoutes);
-
-const purchasesInstallmentsRoutes = require('./purchasesInstallmentsRoutes');
-router.use('/purchases-installments', purchasesInstallmentsRoutes);
+const installmentsRoutes = require('./installmentsRoutes');
+router.use('/installments', installmentsRoutes);
 
 const cashRegisterRoutes = require('./cashRegisterRoutes');
 router.use('/cash-register', cashRegisterRoutes);

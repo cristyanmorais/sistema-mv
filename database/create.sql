@@ -39,18 +39,6 @@ CREATE TABLE sales (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Criação da tabela sales_installments (Parcelas das Vendas)
-CREATE TABLE sales_installments (
-    id SERIAL PRIMARY KEY,
-    sale_id INT NOT NULL REFERENCES sales (id),
-    installment_amount NUMERIC(12, 2) NOT NULL,
-    due_date DATE NOT NULL,
-    paid BOOLEAN DEFAULT FALSE,
-    payment_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 -- Criação da tabela purchases (Compras)
 CREATE TABLE purchases (
     id SERIAL PRIMARY KEY,
@@ -63,10 +51,11 @@ CREATE TABLE purchases (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Criação da tabela purchase_installments (Parcelas das Compras)
-CREATE TABLE purchases_installments (
+-- Criação da tabela installments (Parcelas)
+CREATE TABLE installments (
     id SERIAL PRIMARY KEY,
-    purchase_id INT NOT NULL REFERENCES purchases (id),
+    transaction_id INT NOT NULL,
+    transaction_type VARCHAR(50) NOT NULL,
     installment_amount NUMERIC(12, 2) NOT NULL,
     due_date DATE NOT NULL,
     paid BOOLEAN DEFAULT FALSE,
@@ -100,6 +89,7 @@ CREATE TABLE contracted_services (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
     employee_id INT NOT NULL REFERENCES employees (id),
+    work_id INT NOT NULL REFERENCES works (id),
     description TEXT,
     service_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
