@@ -33,8 +33,9 @@ CREATE TABLE sales (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
     work_id INT NOT NULL REFERENCES works (id),
+    description TEXT,
     sale_date DATE NOT NULL,
-    is_installment BOOLEAN DEFAULT FALSE,
+    num_installments INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -46,7 +47,7 @@ CREATE TABLE purchases (
     description TEXT,
     company_id INT NOT NULL REFERENCES companies (id),
     purchase_date DATE NOT NULL,
-    is_installment BOOLEAN DEFAULT FALSE,
+    num_installments INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -68,6 +69,8 @@ CREATE TABLE installments (
 CREATE TABLE payroll (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
+    description TEXT,
+    num_installments INT DEFAULT 0,
     payroll_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -79,6 +82,7 @@ CREATE TABLE provided_services (
     amount NUMERIC(12, 2) NOT NULL,
     client_id INT NOT NULL REFERENCES clients (id),
     description TEXT,
+    num_installments INT DEFAULT 0,
     service_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -90,6 +94,7 @@ CREATE TABLE contracted_services (
     amount NUMERIC(12, 2) NOT NULL,
     employee_id INT NOT NULL REFERENCES employees (id),
     work_id INT NOT NULL REFERENCES works (id),
+    num_installments INT DEFAULT 0,
     description TEXT,
     service_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -104,6 +109,8 @@ create table taxes_type(
 create table taxes(
 	id SERIAL PRIMARY KEY,
 	amount NUMERIC(12, 2) NOT NULL,
+    description TEXT,
+    num_installments INT DEFAULT 0,
     tax_date DATE DEFAULT CURRENT_TIMESTAMP,
 	taxes_type_id INT NOT NULL REFERENCES taxes_type (id)
 );

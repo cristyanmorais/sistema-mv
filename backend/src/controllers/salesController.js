@@ -26,9 +26,9 @@ exports.getSaleById = async (req, res) => {
 }
 
 exports.createSale = async (req, res) => {
-    const { work_id, amount, sale_date, is_installment } = req.body;
-    const query = 'INSERT INTO sales (work_id, amount, sale_date, is_installment) VALUES ($1, $2, $3, $4) RETURNING id;';
-    const values = [work_id, amount, sale_date, is_installment];
+    const { work_id, amount, sale_date, num_installments, description } = req.body;
+    const query = 'INSERT INTO sales (work_id, amount, sale_date, num_installments, description) VALUES ($1, $2, $3, $4, $5) RETURNING id;';
+    const values = [work_id, amount, sale_date, num_installments, description];
     try {
         result = await db.query(query, values);
 

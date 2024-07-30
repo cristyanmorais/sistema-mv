@@ -26,9 +26,9 @@ exports.getPurchaseById = async (req, res) => {
 }
 
 exports.createPurchase = async (req, res) => {
-    const { company_id, amount, description, purchase_date, is_installment } = req.body;
-    const query = 'INSERT INTO purchases (company_id, amount, description, purchase_date, is_installment) VALUES ($1, $2, $3, $4, $5) RETURNING id;';
-    const values = [company_id, amount, description, purchase_date, is_installment];
+    const { company_id, amount, description, purchase_date, num_installments } = req.body;
+    const query = 'INSERT INTO purchases (company_id, amount, description, purchase_date, num_installments) VALUES ($1, $2, $3, $4, $5) RETURNING id;';
+    const values = [company_id, amount, description, purchase_date, num_installments];
     try {
         result = await db.query(query, values);
 

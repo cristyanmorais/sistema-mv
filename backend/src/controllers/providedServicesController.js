@@ -26,9 +26,9 @@ exports.getProvidedServiceById = async (req, res) => {
 }
 
 exports.createProvidedService = async (req, res) => {
-    const { client_id, amount, description, service_date } = req.body;
-    const query = 'INSERT INTO provided_services (client_id, amount, description, service_date) VALUES ($1, $2, $3, $4) RETURNING id;';
-    const values = [client_id, amount, description, service_date];
+    const { client_id, amount, description, service_date, num_installments } = req.body;
+    const query = 'INSERT INTO provided_services (client_id, amount, description, service_date, num_installments) VALUES ($1, $2, $3, $4, $5) RETURNING id;';
+    const values = [client_id, amount, description, service_date, num_installments];
     try {
         result = await db.query(query, values);
 
@@ -48,9 +48,9 @@ exports.createProvidedService = async (req, res) => {
 
 exports.updateProvidedService = async (req, res) => {
     const id = req.params.id;
-    const { client_id, amount, description, service_date } = req.body;
-    const query = 'UPDATE provided_services SET client_id = $1, amount = $2, description = $3, service_date = $4 WHERE id = $5;';
-    const values = [client_id, amount, description, service_date, id];
+    const { client_id, amount, description, service_date, num_installments } = req.body;
+    const query = 'UPDATE provided_services SET client_id = $1, amount = $2, description = $3, service_date = $4, num_installments = $5 WHERE id = $6;';
+    const values = [client_id, amount, description, service_date, num_installments, id];
     try {
         result = await db.query(query, values);
 

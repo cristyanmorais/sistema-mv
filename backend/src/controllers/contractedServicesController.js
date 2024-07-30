@@ -26,9 +26,9 @@ exports.getContractedServiceById = async (req, res) => {
 }
 
 exports.createContractedService = async (req, res) => {
-    const { employee_id, amount, description, service_date } = req.body;
-    const query = 'INSERT INTO contracted_services (employee_id, amount, description, service_date) VALUES ($1, $2, $3, $4) RETURNING id;';
-    const values = [employee_id, amount, description, service_date];
+    const { employee_id, work_id, amount, description, service_date, num_installments } = req.body;
+    const query = 'INSERT INTO contracted_services (employee_id, work_id, amount, description, service_date, num_installments) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
+    const values = [employee_id, work_id, amount, description, service_date, num_installments];
     try {
         result = await db.query(query, values);
 
@@ -48,9 +48,9 @@ exports.createContractedService = async (req, res) => {
 
 exports.updateContractedService = async (req, res) => {
     const id = req.params.id;
-    const { employee_id, amount, description, service_date } = req.body;
-    const query = 'UPDATE contracted_services SET employee_id = $1, amount = $2, description = $3, service_date = $4 WHERE id = $5;';
-    const values = [employee_id, amount, description, service_date, id];
+    const { employee_id, work_id, amount, description, service_date, num_installments } = req.body;
+    const query = 'UPDATE contracted_services SET employee_id = $1, work_id = $2, amount = $3, description = $4, service_date = $5, num_installments = $6 WHERE id = $7;';
+    const values = [employee_id, work_id, amount, description, service_date, id, num_installments];
     try {
         result = await db.query(query, values);
 
