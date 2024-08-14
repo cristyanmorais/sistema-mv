@@ -4,14 +4,13 @@ import { Body } from '../Teste';
 
 const Sales = () => {
     const [workId, setWorkId] = useState(0);
-    const [amount, setAmount] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
-    const [installment, setInstallment] = useState(false);
+    const [numInstallments, setNumInstallment] = useState(1);
+    const [paid, setPaid] = useState(false);
 
     const [works, setWorks] = useState([]);
-
-    const [installmentDate, setInstallmentDate] = useState('');
-    const [installmentAmount, setInstallmentAmount] = useState('');
 
     const [filledFields, setFilledFields] = useState(false);
 
@@ -22,28 +21,14 @@ const Sales = () => {
     }, []);
 
     useEffect(() => {
-        const amountNumber = parseFloat(amount);
-        const installmentAmountNumber = parseFloat(installmentAmount);
 
-        if (installment) {
-            if (workId > 0 && amountNumber > 0 && date !== '' && installmentDate !== '' && installmentAmountNumber < amountNumber && installmentAmountNumber > 0) {
-                setFilledFields(true);
-            } else {
-                setFilledFields(false);
-            }
+        if (workId > 0 && amount > 0 && date !== '' && description !== '' && numInstallments > 0) {
+            setFilledFields(true);
         } else {
-            if (workId > 0 && amount > 0 && date !== '') {
-                setFilledFields(true);
-            } else {
-                setFilledFields(false);
-            }
+            setFilledFields(false);
         }
 
-    }, [workId, amount, date, installment, installmentDate, installmentAmount])
-
-    const checkHandler = () => {
-        setInstallment(!installment);
-    };
+    }, [workId, amount, date, description, numInstallments])
 
     const handleWorkChange = (e) => {
         setWorkId(e.target.value);
@@ -53,9 +38,8 @@ const Sales = () => {
         setWorkId(0);
         setAmount('');
         setDate('');
-        setInstallment(false);
-        setInstallmentAmount('');
-        setInstallmentDate('');
+        setDescription('');
+        setNumInstallment(1);
     }
 
     const handleConfirm = () => {
@@ -63,14 +47,16 @@ const Sales = () => {
                 work_id: workId,
                 amount: Number(amount),
                 sale_date: date,
-                is_installment: installment
+                description,
+                num_installments: numInstallments,
+                paid
             }
             
             axios.post('http://localhost:3000/api/sales', data)
             .then(response => {
                 console.log("Data succefully sent: ", response.data);
 
-                if (installment) handleInstallment(response.data.id);
+                if (numInstallments > 0) handleInstallment(response.data.id);
 
                 clearFields();
             })
@@ -81,13 +67,14 @@ const Sales = () => {
 
     const handleInstallment = (saleId) => {
         const data = {
-            sale_id: saleId,
-            installment_amount: Number(installmentAmount),
-            due_date: installmentDate,
-            paid: false
+            transaction_id: saleId,
+            transaction_type: 'sales',
+            installment_amount: amount/numInstallments,
+            due_date: "2024-01-01",
+            paid
         }
 
-        axios.post('http://localhost:3000/api/sales-installments', data)
+        axios.post('http://localhost:3000/api/installments', data)
         .then(response => {
             console.log("Data succefully sent: ", response.data);
         })
@@ -118,23 +105,13 @@ const Sales = () => {
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
             </div>
             <div className='field'>
-                <label>Parcelado:</label>
-                <input id='checkbox' type='checkbox' checked={installment} onChange={(e) => setInstallment(e.target.checked)}/>
-                <label htmlFor="checkbox" className="checkbox-custom"></label>
+                <label>Descrição:</label>
+                <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
             </div>
-
-            {installment ? 
-            <div className='installment-field'>
-                <div className='field'>
-                    <label>Data da primeira parcela:</label>
-                    <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
-                </div>
-                <div className='field'>
-                    <label>Valor da primeira parcela:</label>
-                    <input type='number' value={installmentAmount} onChange={e => setInstallmentAmount(e.target.value)}/>
-                </div>
-            </div> 
-            : null}
+            <div className='field'>
+                <label>Número de Parcelas:</label>
+                <input type='number' value={numInstallments} onChange={e => setNumInstallment(e.target.value)}/>
+            </div>
 
             <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
