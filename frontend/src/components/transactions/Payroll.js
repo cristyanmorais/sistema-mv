@@ -5,6 +5,11 @@ import { Body } from '../Teste';
 const Payroll = () => {
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
+    const [description, setDescription] = useState('');
+    const [installment, setInstallment] = useState(false);
+
+    const [installmentDate, setInstallmentDate] = useState('');
+    const [installmentAmount, setInstallmentAmount] = useState('');
 
     const [filledFields, setFilledFields] = useState(false);
 
@@ -22,6 +27,8 @@ const Payroll = () => {
     const clearFields = () => {
         setAmount('');
         setDate('');
+        setInstallment(false);
+        setDescription('');
     }
 
     const handleConfirm = () => {
@@ -72,6 +79,28 @@ const Payroll = () => {
                 <label>Data:</label>
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
             </div>
+            <div className='field'>
+                <label>Descrição:</label>
+                <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
+            </div>
+            <div className='field'>
+                <label>Parcelado:</label>
+                <input id='checkbox' type='checkbox' checked={installment} onChange={(e) => setInstallment(e.target.checked)}/>
+                <label htmlFor="checkbox" className="checkbox-custom"></label>
+            </div>
+
+            {installment ? 
+            <div className='installment-field'>
+                <div className='field'>
+                    <label>Data da primeira parcela:</label>
+                    <input type='date' value={installmentDate} onChange={e => setInstallmentDate(e.target.value)}/>
+                </div>
+                <div className='field'>
+                    <label>Valor da primeira parcela:</label>
+                    <input type='number' value={installmentAmount} onChange={e => setInstallmentAmount(e.target.value)}/>
+                </div>
+            </div> 
+            : null}
 
             <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>

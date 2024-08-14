@@ -1,14 +1,20 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Body } from '../Teste';
+import Installment from '../InstallmentField';
 
 const ContractedServices = () => {
     const [employeeId, setEmployeeId] = useState(0);
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
     const [description, setDescription] = useState('');
+    const [installment, setInstallment] = useState(false);
 
     const [employees, setEmployees] = useState([]);
+
+    const [installmentDate, setInstallmentDate] = useState('');
+    const [installmentAmount, setInstallmentAmount] = useState('');
+    const [installmentNumber, setInstallmentNumber] = useState('');
 
     const [filledFields, setFilledFields] = useState(false);
 
@@ -48,27 +54,27 @@ const ContractedServices = () => {
             description
         }
         
-        const sendTaxesData = (data) => {
+        const sendContractedServiceData = (data) => {
             return axios.post('http://localhost:3000/api/contracted-services', data);
         };
         
-        const sendOtherData = (otherData) => {
-            return axios.post('http://localhost:3000/api/cash-register', otherData);
+        const sendCashRegisterData = (cashRegisterData) => {
+            return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
         };
         
-        sendTaxesData(data)
+        sendContractedServiceData(data)
             .then(response => {
                 console.log("Data successfully sent: ", response.data);
 
-                const otherData = {
-                    transaction_type: "taxes",
+                const cashRegisterData = {
+                    transaction_type: "contracted-services",
                     transaction_id: response.data.id,
                     transaction_date: date,
                     amount: Number(amount)
                 }
         
                 // Chama a segunda função axios aqui
-                return sendOtherData(otherData);
+                return sendCashRegisterData(cashRegisterData);
             })
             .then(response => {
                 console.log("Second request successfully sent: ", response.data);
@@ -105,6 +111,12 @@ const ContractedServices = () => {
                 <label>Descrição:</label>
                 <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
             </div>
+            
+            <Installment
+                setInstallmentDate={setInstallmentDate}
+                setInstallmentAmount={setInstallmentAmount}
+                setInstallmentNumber={setInstallmentNumber}
+            />
 
             <div className='field'>
                 <button onClick={handleConfirm} disabled={!filledFields}>Confirmar</button>
