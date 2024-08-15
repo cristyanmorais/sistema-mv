@@ -60,7 +60,7 @@ exports.createCashRegister = async (req, res) => {
 
         // Calcular o novo saldo
         let balance;
-        if (transaction_type === "contracted_services" || transaction_type === "payroll" || transaction_type === "purchases" || transaction_type === "taxes") {
+        if (transaction_type === "contracted-services" || transaction_type === "payroll" || transaction_type === "purchases" || transaction_type === "taxes") {
             balance = lastBalance - amount; // Despesa
             // console.log("- Balance: " + balance);
         } else {

@@ -51,18 +51,18 @@ const Sales = () => {
         const data = {
             work_id: workId,
             amount: Number(amount),
-                sale_date: date,
-                description,
-                num_installments: numInstallments,
-                paid
+            sale_date: date,
+            description,
+            num_installments: numInstallments,
+            paid
         }
 
         const sendSalesData = (data) => {
             return axios.post('http://localhost:3000/api/sales', data)
         };
         
-        const sendOtherData = (otherData) => {
-            return axios.post('http://localhost:3000/api/cash-register', otherData);
+        const sendCashRegisterData = (cashRegisterData) => {
+            return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
         };
 
         const handleInstallment = (saleId) => {
@@ -87,7 +87,7 @@ const Sales = () => {
             .then(response => {
                 console.log("Sale successfully created: ", response.data);
 
-                const otherData = {
+                const cashRegisterData = {
                     transaction_type: "sales",
                     transaction_id: response.data.id,
                     transaction_date: date,
@@ -97,10 +97,10 @@ const Sales = () => {
                 if (paid === true) {
                     if (numInstallments > 1) {
                         handleInstallment(response.data.id);
-                        otherData.amount = amount/numInstallments;
+                        cashRegisterData.amount = amount/numInstallments;
                     };
 
-                    sendOtherData(otherData)
+                    sendCashRegisterData(cashRegisterData)
                     .then(response => {
                         console.log("Cash Register request successfully sent: ", response.data);
                     

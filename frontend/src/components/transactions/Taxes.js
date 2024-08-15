@@ -6,6 +6,9 @@ const Taxes = () => {
     const [taxTypeId, setTaxTypeId] = useState(0);
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
+    const [description, setDescription] = useState('');
+    const [numInstallments, setNumInstallment] = useState(1);
+    const [paid, setPaid] = useState(false);
 
     const [taxTypes, setTaxTypes] = useState([]);
 
@@ -18,15 +21,14 @@ const Taxes = () => {
     }, []);
 
     useEffect(() => {
-        const amountNumber = parseFloat(amount);
-
-        if (taxTypeId > 0 && amountNumber > 0 && date !== '') {
+        
+        if (taxTypeId > 0 && amount > 0 && date !== '' && description !== '' && numInstallments > 0) {
             setFilledFields(true);
         } else {
             setFilledFields(false);
         }
 
-    }, [taxTypeId, amount, date]);
+    }, [taxTypeId, amount, date, description, numInstallments]);
 
     const handleTaxTypeChange = (e) => {
         setTaxTypeId(e.target.value);
@@ -36,6 +38,9 @@ const Taxes = () => {
         setTaxTypeId(0);
         setAmount('');
         setDate('');
+        setDescription('');
+        setNumInstallment(1);
+        setPaid(false);
     }
 
     const handleConfirm = () => {
@@ -43,38 +48,65 @@ const Taxes = () => {
                 taxes_type_id: taxTypeId,
                 amount: Number(amount),
                 tax_date: date,
+                description,
+                num_installments: numInstallments,
+                paid
             }
             
             const sendTaxesData = (data) => {
                 return axios.post('http://localhost:3000/api/taxes', data);
             };
             
-            const sendOtherData = (otherData) => {
-                return axios.post('http://localhost:3000/api/cash-register', otherData);
+            const sendCashRegisterData = (cashRegisterData) => {
+                return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
             };
+
+            const handleInstallment = (taxId) => {
+                const data = {
+                    transaction_id: taxId,
+                    transaction_type: 'taxes',
+                    installment_amount: amount/numInstallments,
+                    due_date: "2024-01-01",
+                    paid
+                }
+        
+                axios.post('http://localhost:3000/api/installments', data)
+                .then(response => {
+                    console.log("Installment succefully created: ", response.data);
+                })
+                .catch(error => {
+                    console.error("Error while sending Installment: ", error);
+                })
+            }
             
             sendTaxesData(data)
                 .then(response => {
                     console.log("Data successfully sent: ", response.data);
 
-                    const otherData = {
+                    const cashRegisterData = {
                         transaction_type: "taxes",
                         transaction_id: response.data.id,
                         transaction_date: date,
                         amount: Number(amount)
                     }
             
-                    // Chama a segunda função axios aqui
-                    return sendOtherData(otherData);
+                    if (paid === true) {
+                        if (numInstallments > 1) {
+                            handleInstallment(response.data.id);
+                            cashRegisterData.amount = amount/numInstallments;
+                        };
+    
+                        sendCashRegisterData(cashRegisterData)
+                        .then(response => {
+                            console.log("Cash Register request successfully sent: ", response.data);
+                        
+                            clearFields();
+                        })
+                        .catch(error => {
+                            console.error("Error while sending Cash Register: ", error);
+                        });
+                    }
                 })
-                .then(response => {
-                    console.log("Second request successfully sent: ", response.data);
-            
-                    clearFields();
-                })
-                .catch(error => {
-                    console.error("Error while sending data: ", error);
-                });
     }
 
     return (
@@ -97,6 +129,20 @@ const Taxes = () => {
             <div className='field'>
                 <label>Data:</label>
                 <input type='date' value={date} onChange={e => setDate(e.target.value)}/>
+            </div>
+            <div className='field'>
+                <label>Descrição:</label>
+                <input type='text' value={description} onChange={e => setDescription(e.target.value)}/>
+            </div>
+            <div className='field'>
+                <label>Número de Parcelas:</label>
+                <input type='number' min={1} value={numInstallments} onChange={e => setNumInstallment(e.target.value)}/>
+            </div>
+
+            <div className='field'>
+                <label>Pago:</label>
+                <input id='checkbox' type='checkbox' checked={paid} onChange={(e) => setPaid(e.target.checked)}/>
+                <label htmlFor="checkbox" className="checkbox-custom"></label>
             </div>
 
             <div className='field'>
