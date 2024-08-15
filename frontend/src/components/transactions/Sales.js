@@ -21,6 +21,10 @@ const Sales = () => {
     }, []);
 
     useEffect(() => {
+        if (numInstallments < 1) setNumInstallment(1);
+    }, [numInstallments]);
+
+    useEffect(() => {
 
         if (workId > 0 && amount > 0 && date !== '' && description !== '' && numInstallments > 0) {
             setFilledFields(true);
@@ -40,47 +44,73 @@ const Sales = () => {
         setDate('');
         setDescription('');
         setNumInstallment(1);
+        setPaid(false);
     }
 
     const handleConfirm = () => {
-            const data = {
-                work_id: workId,
-                amount: Number(amount),
+        const data = {
+            work_id: workId,
+            amount: Number(amount),
                 sale_date: date,
                 description,
                 num_installments: numInstallments,
                 paid
-            }
-            
-            axios.post('http://localhost:3000/api/sales', data)
-            .then(response => {
-                console.log("Data succefully sent: ", response.data);
-
-                if (numInstallments > 0) handleInstallment(response.data.id);
-
-                clearFields();
-            })
-            .catch(error => {
-                console.error("Error while sending data: ", error);
-            })
-    }
-
-    const handleInstallment = (saleId) => {
-        const data = {
-            transaction_id: saleId,
-            transaction_type: 'sales',
-            installment_amount: amount/numInstallments,
-            due_date: "2024-01-01",
-            paid
         }
 
-        axios.post('http://localhost:3000/api/installments', data)
-        .then(response => {
-            console.log("Data succefully sent: ", response.data);
-        })
-        .catch(error => {
-            console.error("Error while sending data: ", error);
-        })
+        const sendSalesData = (data) => {
+            return axios.post('http://localhost:3000/api/sales', data)
+        };
+        
+        const sendOtherData = (otherData) => {
+            return axios.post('http://localhost:3000/api/cash-register', otherData);
+        };
+
+        const handleInstallment = (saleId) => {
+            const data = {
+                transaction_id: saleId,
+                transaction_type: 'sales',
+                installment_amount: amount/numInstallments,
+                due_date: "2024-01-01",
+                paid
+            }
+    
+            axios.post('http://localhost:3000/api/installments', data)
+            .then(response => {
+                console.log("Installment succefully created: ", response.data);
+            })
+            .catch(error => {
+                console.error("Error while sending Installment: ", error);
+            })
+        }
+
+        sendSalesData(data)
+            .then(response => {
+                console.log("Sale successfully created: ", response.data);
+
+                const otherData = {
+                    transaction_type: "sales",
+                    transaction_id: response.data.id,
+                    transaction_date: date,
+                    amount: Number(amount)
+                }
+
+                if (paid === true) {
+                    if (numInstallments > 1) {
+                        handleInstallment(response.data.id);
+                        otherData.amount = amount/numInstallments;
+                    };
+
+                    sendOtherData(otherData)
+                    .then(response => {
+                        console.log("Cash Register request successfully sent: ", response.data);
+                    
+                        clearFields();
+                    })
+                    .catch(error => {
+                        console.error("Error while sending Cash Register: ", error);
+                    });
+                }
+            })
     }
 
     return (
@@ -110,7 +140,13 @@ const Sales = () => {
             </div>
             <div className='field'>
                 <label>Número de Parcelas:</label>
-                <input type='number' value={numInstallments} onChange={e => setNumInstallment(e.target.value)}/>
+                <input type='number' min={1} value={numInstallments} onChange={e => setNumInstallment(e.target.value)}/>
+            </div>
+
+            <div className='field'>
+                <label>Pago:</label>
+                <input id='checkbox' type='checkbox' checked={paid} onChange={(e) => setPaid(e.target.checked)}/>
+                <label htmlFor="checkbox" className="checkbox-custom"></label>
             </div>
 
             <div className='field'>
