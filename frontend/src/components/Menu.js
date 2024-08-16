@@ -44,6 +44,10 @@ const Menu = () => {
         <div>
             <NavLink to="/installments" className="link">PARCELAS</NavLink>
         </div>
+        <Linha />
+        <div>
+            <NavLink to="/register" className="link">CADASTRO</NavLink>
+        </div>
     </Div>
   );
 };

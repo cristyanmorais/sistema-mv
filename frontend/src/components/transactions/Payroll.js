@@ -51,7 +51,7 @@ const Payroll = () => {
         const data = {
             employee_id: employeeId,
             amount: Number(amount),
-            payroll_date: date,
+            date,
             description,
             num_installments: numInstallments,
             paid

@@ -26,9 +26,9 @@ exports.getSaleById = async (req, res) => {
 }
 
 exports.createSale = async (req, res) => {
-    const { work_id, amount, sale_date, num_installments, description, paid } = req.body;
-    const query = 'INSERT INTO sales (work_id, amount, sale_date, num_installments, description, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
-    const values = [work_id, amount, sale_date, num_installments, description, paid];
+    const { work_id, amount, date, num_installments, description, paid } = req.body;
+    const query = 'INSERT INTO sales (work_id, amount, date, num_installments, description, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
+    const values = [work_id, amount, date, num_installments, description, paid];
     try {
         result = await db.query(query, values);
 
@@ -50,9 +50,9 @@ exports.createSale = async (req, res) => {
 
 exports.updateSale = async (req, res) => {
     const id = req.params.id;
-    const { work_id, amount, sale_date, num_installments, description, paid } = req.body;
-    const query = 'UPDATE payroll SET work_id = $1, amount = $2, description = $3, sale_date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
-    const values = [ work_id, amount, sale_date, num_installments, description, paid, id];
+    const { work_id, amount, date, num_installments, description, paid } = req.body;
+    const query = 'UPDATE payroll SET work_id = $1, amount = $2, description = $3, date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
+    const values = [ work_id, amount, date, num_installments, description, paid, id];
     try {
         result = await db.query(query, values);
 

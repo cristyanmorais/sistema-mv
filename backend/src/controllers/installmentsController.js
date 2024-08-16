@@ -1,8 +1,37 @@
 const db = require('../config/db');
 
+// exports.getAllInstallments = async (req, res) => {
+//     try {
+//         const result = await db.query('SELECT * FROM installments');
+//         res.json(result.rows);
+
+//     } catch (err) {
+//         res.status(500).send(err.message);
+//     }
+// };
+
 exports.getAllInstallments = async (req, res) => {
+    const { transactionType, paid } = req.query;
+
     try {
-        const result = await db.query('SELECT * FROM installments');
+        let query = 'SELECT * FROM installments WHERE TRUE';
+        const values = [];
+
+        if (transactionType) {
+            query += ` AND transaction_type = $${values.length + 1}`;
+            values.push(transactionType);
+            console.log("transaction type");
+        }
+
+        if (typeof paid !== 'undefined' && paid !== '') {
+            query += ` AND paid = $${values.length + 1}`;
+            values.push(paid === 'true');
+            console.log(" paid");
+        }
+
+        query += ' ORDER BY id';
+
+        const result = await db.query(query, values);
         res.json(result.rows);
 
     } catch (err) {

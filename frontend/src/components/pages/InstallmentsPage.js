@@ -5,6 +5,9 @@ import Layout from '../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import { getFormattedDate } from "../Functions";
+import { getTransactionTypeLabel } from "../Functions";
+
 // Formatar as Datas
 
 const Body = styled.div`
@@ -12,6 +15,10 @@ const Body = styled.div`
         // height: 900px;
         display: flex;
         justify-content: space-around;
+    `;
+
+    const FiltersContainer = styled.div`
+        margin-bottom: 20px;
     `;
 
     const Div = styled.div`
@@ -36,65 +43,82 @@ const Body = styled.div`
     `;
 
 const InstallmentsPage = () => {
-    const [purchases, setPurchases] = useState([]);
-    const [sales, setSales] = useState([]);
+    const [filterTerm, setFilterTerm] = useState({
+        transactionType: '',
+        paid: ''
+    });
     const [installments, setInstallments] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // axios.get('http://localhost:3000/api/purchases-installments')
-        // .then(response => setPurchases(response.data))
-        // .catch(error => console.error('Error: ', error));
-
-        // axios.get('http://localhost:3000/api/sales-installments')
-        // .then(response => setSales(response.data))
-        // .catch(error => console.error('Error: ', error));
-
-        // getFormattedDate("2024-02-01");
-
-        axios.get('http://localhost:3000/api/installments')
+        axios.get('http://localhost:3000/api/installments', {
+            params: filterTerm
+        })
         .then(response => setInstallments(response.data))
         .catch(error => console.error('Error: ', error));
-    }, [])
+    }, [filterTerm]);
 
-    const handleRowClick = (id, isSale, transactionId) => {
-        navigate('/installment-details', {state: { id, isSale, transactionId }});
+    const handleFilterChange = (key, value) => {
+        setFilterTerm(prevState => ({
+            ...prevState,
+            [key]: value
+        }));
     }
 
-    const getTransactionTypeLabel = (type) => {
-        switch(type) {
-            case 'purchases':
-                return 'Compra';
-            case 'sales':
-                return 'Venda';
-            case 'taxes':
-                return 'Imposto';
-            case 'payroll':
-                return 'Folha de Pagamento';
-            case 'provided-services':
-                return 'Serviços Prestados';
-            case 'contracted-services':
-                return 'Serviços Contratados';
-            default:
-                return 'Outro';
-        }
+    const handleRowClick = (id, amount) => {
+        navigate('/installment-details', {state: { id, amount }});
     }
 
-    const getFormattedDate = (date) => {
-        return date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
-        // console.log(formattedDate);
-    }
+    // const getTransactionTypeLabel = (type) => {
+    //     switch(type) {
+    //         case 'purchases':
+    //             return 'Compra';
+    //         case 'sales':
+    //             return 'Venda';
+    //         case 'taxes':
+    //             return 'Imposto';
+    //         case 'payroll':
+    //             return 'Folha de Pagamento';
+    //         case 'provided-services':
+    //             return 'Serviços Prestados';
+    //         case 'contracted-services':
+    //             return 'Serviços Contratados';
+    //         default:
+    //             return 'Outro';
+    //     }
+    // }
 
-    // useEffect(() => {
-    //     console.log("purchases: " + purchases[0] + "\nsales: " + sales[0]);
-    // }, [purchases, sales])
+    // const getFormattedDate = (date) => {
+    //     return date.substring(8, 10) + "-" + date.substring(5, 7) + "-" + date.substring(0, 4);
+    // }
 
 
     return (
         <Layout>
             <Body>
+            <FiltersContainer>
+                    <label>
+                        Tipo de Transação:
+                        <select value={filterTerm.transactionType} onChange={e => handleFilterChange('transactionType', e.target.value)}>
+                            <option value="">Todos</option>
+                            <option value="purchases">Compra</option>
+                            <option value="sales">Venda</option>
+                            <option value="taxes">Imposto</option>
+                            <option value="payroll">Folha de Pagamento</option>
+                            <option value="provided-services">Serviços Prestados</option>
+                            <option value="contracted-services">Serviços Contratados</option>
+                        </select>
+                    </label>
+                    <label>
+                        Pago:
+                        <select value={filterTerm.paid} onChange={e => handleFilterChange('paid', e.target.value)}>
+                            <option value="">Todos</option>
+                            <option value="true">Fechado</option>
+                            <option value="false">Aberto</option>
+                        </select>
+                    </label>
+                </FiltersContainer>
                 <Div>
-                    <h1>Compras:</h1>
                     <Table>
                         <thead>
                             <tr className="title">
@@ -107,7 +131,7 @@ const InstallmentsPage = () => {
                         </thead>
                         <tbody>
                             {installments.map((installment, index) => (
-                                <tr key={installment.id} onClick={() => handleRowClick(installment.id, false, installment.installment_id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                <tr key={installment.id} onClick={() => handleRowClick(installment.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
                                     <td>{installment.id}</td>
                                     <td>{installment.installment_amount}</td>
                                     <td>{getFormattedDate(installment.due_date)}</td>
@@ -118,27 +142,6 @@ const InstallmentsPage = () => {
                         </tbody>
                     </Table>
                 </Div>
-                {/* <Div>
-                    <h1>Vendas:</h1>
-                    <Table>
-                        <thead>
-                            <tr className="title">
-                                <th>ID</th>
-                                <th>VALOR</th>
-                                <th>VENCIMENTO</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {sales.map((sale, index) => (
-                                <tr key={sale.id} onClick={() => handleRowClick(sale.id, true, sale.sale_id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{sale.id}</td>
-                                    <td>{sale.installment_amount}</td>
-                                    <td>{sale.due_date.substring(0, 10)}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </Div> */}
             </Body>
         </Layout>
     );

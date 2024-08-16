@@ -51,7 +51,7 @@ const Purchases = () => {
             const data = {
                 company_id: companyId,
                 amount: Number(amount),
-                purchase_date: date,
+                date,
                 description,
                 num_installments: numInstallments,
                 paid

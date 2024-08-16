@@ -26,9 +26,9 @@ exports.getPurchaseById = async (req, res) => {
 }
 
 exports.createPurchase = async (req, res) => {
-    const { company_id, amount, description, purchase_date, num_installments, paid } = req.body;
-    const query = 'INSERT INTO purchases (company_id, amount, description, purchase_date, num_installments, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
-    const values = [company_id, amount, description, purchase_date, num_installments, paid];
+    const { company_id, amount, description, date, num_installments, paid } = req.body;
+    const query = 'INSERT INTO purchases (company_id, amount, description, date, num_installments, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
+    const values = [company_id, amount, description, date, num_installments, paid];
     try {
         result = await db.query(query, values);
 
@@ -48,9 +48,9 @@ exports.createPurchase = async (req, res) => {
 
 exports.updatePurchase = async (req, res) => {
     const id = req.params.id;
-    const { company_id, amount, description, purchase_date, num_installments, paid } = req.body;
-    const query = 'UPDATE payroll SET company_id = $1, amount = $2, description = $3, purchase_date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
-    const values = [ company_id, amount, description, purchase_date, num_installments, paid, id];
+    const { company_id, amount, description, date, num_installments, paid } = req.body;
+    const query = 'UPDATE payroll SET company_id = $1, amount = $2, description = $3, date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
+    const values = [ company_id, amount, description, date, num_installments, paid, id];
     try {
         result = await db.query(query, values);
 

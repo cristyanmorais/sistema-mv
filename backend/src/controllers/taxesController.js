@@ -26,9 +26,9 @@ exports.getTaxById = async (req, res) => {
 }
 
 exports.createTax = async (req, res) => {
-    const { taxes_type_id, amount, tax_date, num_installments, description, paid } = req.body;
-    const query = 'INSERT INTO taxes (taxes_type_id, amount, tax_date, num_installments, description, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
-    const values = [taxes_type_id, amount, tax_date, num_installments, description, paid];
+    const { taxes_type_id, amount, date, num_installments, description, paid } = req.body;
+    const query = 'INSERT INTO taxes (taxes_type_id, amount, date, num_installments, description, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
+    const values = [taxes_type_id, amount, date, num_installments, description, paid];
     try {
         result = await db.query(query, values);
 
@@ -48,9 +48,9 @@ exports.createTax = async (req, res) => {
 
 exports.updateTax = async (req, res) => {
     const id = req.params.id;
-    const { taxes_type_id, amount, tax_date, num_installments, description, paid } = req.body;
-    const query = 'UPDATE taxes SET taxes_type_id = $1, amount = $2, tax_date = $3, num_installments = $4, description = $5, paid = $6 WHERE id = $7;';
-    const values = [taxes_type_id, amount, tax_date, num_installments, description, paid, id];
+    const { taxes_type_id, amount, date, num_installments, description, paid } = req.body;
+    const query = 'UPDATE taxes SET taxes_type_id = $1, amount = $2, date = $3, num_installments = $4, description = $5, paid = $6 WHERE id = $7;';
+    const values = [taxes_type_id, amount, date, num_installments, description, paid, id];
     try {
         result = await db.query(query, values);
 

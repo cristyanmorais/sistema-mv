@@ -8,6 +8,9 @@ import Payroll from "../transactions/Payroll";
 import ProvidedServices from "../transactions/ProvidedServices";
 import ContractedServices from "../transactions/ContractedServices";
 import Taxes from "../transactions/Taxes";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getFormattedDate, getTransactionTypeLabel } from "../Functions";
 
 const Body = styled.div`
         // background-color: lightblue;
@@ -49,30 +52,41 @@ const Body = styled.div`
         }
     `;
 
+    const Table = styled.table`
+        tr:not(.title) {
+            cursor: pointer;
+        }
+
+        th {
+            border-bottom: 2px solid #212139;
+        }
+
+        .odd {
+            background-color: lightgrey;
+        }
+    `;
+
 const TransactionPage = () => {
     const [selectedType, setSelectedType] = useState('');
+    const [transactions, setTransactions] = useState([]);
 
-    // useEffect(() => {
-    //   console.log(selectedType);
-    // }, [selectedType])
+    const navigate = useNavigate();
 
-    const renderComponent = () => {
-        switch (selectedType) {
-            case "sales":
-                return <Sales />;
-            case "purchases":
-                return <Purchases />;
-            case "payroll":
-                return <Payroll />;
-            case "provided_services":
-                return <ProvidedServices />;
-            case "contracted_services":
-                return <ContractedServices />;
-            case "taxes":
-                return <Taxes />;
-            default:
-                return null;
-        }
+    useEffect(() => {
+    if (selectedType === "taxes") {
+        axios.get(`http://localhost:3000/api/taxes`)
+        .then(response => setTransactions(response.data))
+        .catch(error => console.error('Error: ', error));
+    } else {
+        axios.get(`http://localhost:3000/api/${selectedType}`)
+        .then(response => setTransactions(response.data))
+        .catch(error => console.error('Error: ', error));
+    }
+      
+    }, [selectedType])
+
+    const handleRowClick = (id, amount) => {
+        navigate('/transaction-details', {state: { id, amount }});
     }
 
     return (
@@ -86,12 +100,34 @@ const TransactionPage = () => {
                         <option value="purchases">Compra</option>
                         <option value="taxes">Imposto</option>
                         <option value="payroll">Folha de Pagamento</option>
-                        <option value="provided_services">Serviço Prestado</option>
-                        <option value="contracted_services">Serviço Contratado</option>
+                        <option value="provided-services">Serviço Prestado</option>
+                        <option value="contracted-services">Serviço Contratado</option>
                     </select>
                 </TransactionType>
 
-                {renderComponent()}
+                <Table>
+                        <thead>
+                            <tr className="title">
+                                <th>ID</th>
+                                <th>VALOR</th>
+                                <th>VENCIMENTO</th>
+                                <th>TIPO</th>
+                                <th>PAGO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {transactions.map((transaction, index) => (
+                                <tr key={transaction.id} onClick={() => handleRowClick(transaction.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{transaction.id}</td>
+                                    <td>{transaction.amount}</td>
+                                    <td>{transaction.date ? getFormattedDate(transaction.date) : null}</td>
+                                    {/* <td>{getTransactionTypeLabel(transaction.transaction_type)}</td> */}
+                                    <td>{transaction.paid === true ? "Fechado" : "Aberto"}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                
             </Body>
         </Layout>
     );

@@ -51,7 +51,7 @@ const Sales = () => {
         const data = {
             work_id: workId,
             amount: Number(amount),
-            sale_date: date,
+            date,
             description,
             num_installments: numInstallments,
             paid
