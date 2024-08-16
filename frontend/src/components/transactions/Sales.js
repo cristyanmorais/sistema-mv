@@ -66,21 +66,33 @@ const Sales = () => {
         };
 
         const handleInstallment = (saleId) => {
-            const data = {
+            const installmentData = {
                 transaction_id: saleId,
                 transaction_type: 'sales',
                 installment_amount: amount/numInstallments,
-                due_date: "2024-01-01",
+                due_date: date,
                 paid
             }
-    
-            axios.post('http://localhost:3000/api/installments', data)
-            .then(response => {
-                console.log("Installment succefully created: ", response.data);
-            })
-            .catch(error => {
-                console.error("Error while sending Installment: ", error);
-            })
+
+            const originalYear = parseInt(date.substring(0, 4));
+            const originalMonth = parseInt(date.substring(5, 7));
+
+            for (let i = 0; i < numInstallments; i++) {
+                const newMonth = ((originalMonth + i - 1) % 12) + 1;
+                const newYear = originalYear + Math.floor((originalMonth + i - 1) / 12);
+                const formattedMonth = newMonth.toString().padStart(2, '0');
+                
+                installmentData.due_date = `${newYear}-${formattedMonth}${date.substring(7)}`;
+                console.log(installmentData.due_date);
+
+                axios.post('http://localhost:3000/api/installments', installmentData)
+                .then(response => {
+                    console.log("Installment " + (i + 1) + " succefully created: ", response.data);
+                })
+                .catch(error => {
+                    console.error("Error while sending Installment " + (i + 1) + ": ", error);
+                })
+            }
         }
 
         sendSalesData(data)
@@ -96,7 +108,6 @@ const Sales = () => {
 
                 if (paid === true) {
                     if (numInstallments > 1) {
-                        handleInstallment(response.data.id);
                         cashRegisterData.amount = amount/numInstallments;
                     };
 
@@ -109,6 +120,9 @@ const Sales = () => {
                     .catch(error => {
                         console.error("Error while sending Cash Register: ", error);
                     });
+                } else {
+                    handleInstallment(response.data.id);
+                    clearFields();
                 }
             })
     }
