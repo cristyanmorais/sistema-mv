@@ -14,6 +14,8 @@ const Sales = () => {
 
     const [filledFields, setFilledFields] = useState(false);
 
+    const [workIdInput, setWorkIdInput] = useState('');
+
     useEffect(() => {
         axios.get('http://localhost:3000/api/works')
         .then(response => setWorks(response.data))
@@ -35,8 +37,16 @@ const Sales = () => {
     }, [workId, amount, date, description, numInstallments])
 
     const handleWorkChange = (e) => {
-        setWorkId(e.target.value);
-    }
+        const selectedWorkId = e.target.value;
+        setWorkId(selectedWorkId);
+        setWorkIdInput(selectedWorkId); // Sincroniza o campo de input de ID
+    };
+
+    const handleWorkIdInputChange = (e) => {
+        const inputId = e.target.value;
+        setWorkId(inputId);
+        setWorkIdInput(inputId);
+    };
 
     const clearFields = () => {
         setWorkId(0);
@@ -131,14 +141,22 @@ const Sales = () => {
         <Body>
             <div className='field'>
                 <label>Obra:</label>
-                <select value={workId} onChange={handleWorkChange}>
-                    <option value={0} disabled>Selecione uma obra</option>
-                    {works.map(work => (
-                        <option key={work.id} value={work.id}>
-                            {work.name}
-                        </option>
-                    ))}
-                </select>
+                <div className='select-id'>
+                    <input
+                        // type='number'
+                        placeholder='ID'
+                        value={workIdInput}
+                        onChange={handleWorkIdInputChange}
+                    />
+                    <select value={workId} onChange={handleWorkChange}>
+                        <option value={0} disabled>Selecione uma obra</option>
+                        {works.map(work => (
+                            <option key={work.id} value={work.id}>
+                                {work.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
             <div className='field'>
                 <label>Preço:</label>

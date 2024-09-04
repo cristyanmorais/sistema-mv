@@ -34,9 +34,8 @@ export const Body = styled.div`
             font-size: 15px;
             width: 300px;
             margin: auto;
-            height: 30px;
+            height: 36px;
             text-align: center;
-            border-radius: 30px;
         }
 
         input:not(.check-box) {
@@ -45,7 +44,6 @@ export const Body = styled.div`
             margin: auto;
             height: 30px;
             text-align: center;
-            border-radius: 30px;
         }
 
         input[type="checkbox"] {
@@ -73,11 +71,30 @@ export const Body = styled.div`
             border-color: #fff;
         }
 
+        input[type="number"] {
+            width: 60px;
+            text-align: center;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
         button {
             // height: 30px;
             padding: 10px 30px;
             font-size: 20px;
             border-radius: 30px;
             margin-top: 20px;
+        }
+
+        .select-id {
+            display: flex;
+
+            input {
+                width: 50px;
+            }
         }
 `;
