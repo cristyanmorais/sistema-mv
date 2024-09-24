@@ -119,6 +119,7 @@ const Sales = () => {
                 if (paid === true) {
                     if (numInstallments > 1) {
                         cashRegisterData.amount = amount/numInstallments;
+                        handleInstallment(response.data.id);
                     };
 
                     sendCashRegisterData(cashRegisterData)
