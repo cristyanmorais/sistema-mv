@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllContractedServices = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM contracted_services');
+        const result = await db.query('SELECT * FROM contracted_services order by created_at desc');
         res.json(result.rows);
 
     } catch (err) {

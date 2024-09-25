@@ -105,7 +105,7 @@ const TransactionPage = () => {
                                 <th>ID</th>
                                 <th>VALOR</th>
                                 <th>VENCIMENTO</th>
-                                <th>TIPO</th>
+                                <th>PARCELAS</th>
                                 <th>PAGO</th>
                             </tr>
                         </thead>
@@ -115,7 +115,7 @@ const TransactionPage = () => {
                                     <td>{transaction.id}</td>
                                     <td>{transaction.amount}</td>
                                     <td>{transaction.date ? getFormattedDate(transaction.date) : null}</td>
-                                    <td>{getTransactionTypeLabel(transaction.transaction_type)}</td>
+                                    <td>{transaction.num_installments}</td>
                                     <td>{transaction.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}

@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllTaxes = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM taxes');
+        const result = await db.query('SELECT * FROM taxes order by created_at desc');
         res.json(result.rows);
 
     } catch (err) {

@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllPayrolls = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM payroll');
+        const result = await db.query('SELECT * FROM payroll order by created_at desc');
         res.json(result.rows);
 
     } catch (err) {

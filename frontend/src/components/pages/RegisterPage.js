@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
 import Layout from '../Layout'
-import { Clients, Companies, Employees, Works } from "../register/test";
+import { Clients, Companies, Employees, Works } from "../register/Steady";
 
 const Body = styled.div`
         // background-color: lightblue;

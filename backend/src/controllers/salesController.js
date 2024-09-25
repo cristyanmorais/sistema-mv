@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllSales = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM sales');
+        const result = await db.query('SELECT * FROM sales order by created_at desc');
         res.json(result.rows);
 
     } catch (err) {
