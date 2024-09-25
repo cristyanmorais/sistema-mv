@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
 import Layout from '../Layout'
-import Sales from "../transactions/Sales";
-import Purchases from "../transactions/Purchases";
-import Payroll from "../transactions/Payroll";
-import ProvidedServices from "../transactions/ProvidedServices";
-import ContractedServices from "../transactions/ContractedServices";
-import Taxes from "../transactions/Taxes";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate, getTransactionTypeLabel } from "../Functions";
@@ -121,7 +115,7 @@ const TransactionPage = () => {
                                     <td>{transaction.id}</td>
                                     <td>{transaction.amount}</td>
                                     <td>{transaction.date ? getFormattedDate(transaction.date) : null}</td>
-                                    {/* <td>{getTransactionTypeLabel(transaction.transaction_type)}</td> */}
+                                    <td>{getTransactionTypeLabel(transaction.transaction_type)}</td>
                                     <td>{transaction.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}

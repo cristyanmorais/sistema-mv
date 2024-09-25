@@ -2,12 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
 import Layout from '../Layout'
-import Sales from "../transactions/Sales";
-import Purchases from "../transactions/Purchases";
-import Payroll from "../transactions/Payroll";
-import ProvidedServices from "../transactions/ProvidedServices";
-import ContractedServices from "../transactions/ContractedServices";
-import Taxes from "../transactions/Taxes";
+import { Clients, Companies, Employees, Works } from "../register/test";
 
 const Body = styled.div`
         // background-color: lightblue;
@@ -58,18 +53,14 @@ const Register = () => {
 
     const renderComponent = () => {
         switch (selectedType) {
-            case "sales":
-                return <Sales />;
-            case "purchases":
-                return <Purchases />;
-            case "payroll":
-                return <Payroll />;
-            case "provided_services":
-                return <ProvidedServices />;
-            case "contracted_services":
-                return <ContractedServices />;
-            case "taxes":
-                return <Taxes />;
+            case "clients":
+                return <Clients />;
+            case "companies":
+                return <Companies />;
+            case "employees":
+                return <Employees />;
+            case "works":
+                return <Works />;
             default:
                 return null;
         }
@@ -79,15 +70,13 @@ const Register = () => {
         <Layout>
             <Body>
                 <TransactionType>
-                    <label>Tipo de Transação:</label>
+                    <label>Cadastro:</label>
                     <select value={selectedType} onChange={e => setSelectedType(e.target.value)}>
                         <option value={0}>Selecione uma transação</option>
-                        <option value="sales">Venda</option>
-                        <option value="purchases">Compra</option>
-                        <option value="taxes">Imposto</option>
-                        <option value="payroll">Folha de Pagamento</option>
-                        <option value="provided_services">Serviço Prestado</option>
-                        <option value="contracted_services">Serviço Contratado</option>
+                        <option value="clients">Clientes</option>
+                        <option value="companies">Empresas</option>
+                        <option value="employees">Funcionários</option>
+                        <option value="works">Obras</option>
                     </select>
                 </TransactionType>
 
