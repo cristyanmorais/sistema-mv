@@ -67,16 +67,9 @@ const TransactionPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-    if (selectedType === "taxes") {
-        axios.get(`http://localhost:3000/api/taxes`)
-        .then(response => setTransactions(response.data))
-        .catch(error => console.error('Error: ', error));
-    } else {
         axios.get(`http://localhost:3000/api/${selectedType}`)
         .then(response => setTransactions(response.data))
         .catch(error => console.error('Error: ', error));
-    }
-      
     }, [selectedType])
 
     const handleRowClick = (id, amount) => {
@@ -107,6 +100,7 @@ const TransactionPage = () => {
                                 <th>VENCIMENTO</th>
                                 <th>PARCELAS</th>
                                 <th>PAGO</th>
+                                <th>DESCRIÇÃO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,6 +111,7 @@ const TransactionPage = () => {
                                     <td>{transaction.date ? getFormattedDate(transaction.date) : null}</td>
                                     <td>{transaction.num_installments}</td>
                                     <td>{transaction.paid === true ? "Fechado" : "Aberto"}</td>
+                                    <td>{transaction.description}</td>
                                 </tr>
                             ))}
                         </tbody>

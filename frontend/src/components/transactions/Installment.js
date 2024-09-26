@@ -15,19 +15,29 @@ const Body = styled.div`
 
 const Installment = () => {
     const location = useLocation();
-    const transactionId = location.state?.id;
-
+    const installmentId = location.state?.id;
+    const [amount, setAmount] = useState(0);
     const [transaction, setTransaction] = useState({});
+    const [transactionId, setTransactionId] = useState(0);
+    const [transactionType, setTransactionType] = useState('');
 
     useEffect(() => {
-        console.log("fetchTransaction");
-        axios.get(`http://localhost:3000/api/installments/${transactionId}`)
+        // console.log("fetchTransaction");
+        axios.get(`http://localhost:3000/api/installments/${installmentId}`)
         .then(response => {
             setTransaction(response.data);
-            console.log(response.data);
+            fetchAmount(response.data.transaction_id, response.data.transaction_type.replace(/-/g, '_'));
         })
         .catch(error => console.error('Error: ', error));
     },[]);
+
+    const fetchAmount = (id, type) => {
+        axios.get(`http://localhost:3000/api/installments/amount/a?transaction_type=${type}&transaction_id=${id}`)
+        .then(response => {
+            setAmount(response.data.amount);
+        })
+        .catch(error => console.error('Error: ', error));
+    };    
 
     return (
         <Layout>
@@ -47,8 +57,7 @@ const Installment = () => {
                 <div>
                     <h1>Dados da Transação:</h1>
                     <p>ID: {transaction.id}</p>
-                    <p>Valor: {transaction.amount}</p>
-                    {/* <p>Data: {isSale ? `${transaction.sale_date.substring(0, 10)}` : `${transaction.purchase_date.substring(0, 10)}`}</p> */}
+                    <p>Valor: {amount}</p>
                 </div>
             </Body>
         </Layout>

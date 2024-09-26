@@ -46,7 +46,7 @@ exports.getInstallmentById = async (req, res) => {
 
 exports.getNextInstallment = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM installments order by due_date');
+        const result = await db.query('SELECT * FROM installments where paid = false order by due_date');
         
         if (result.rows.length === 0) {
             return res.status(404).send(' Installment not found');
@@ -58,6 +58,34 @@ exports.getNextInstallment = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.getTransactionValue = async (req, res) => {
+    try {
+        const { transaction_type, transaction_id } = req.query;
+        // console.log("Transaction Type: ", transaction_type);
+        // console.log("Transaction ID: ", transaction_id);
+
+        const validTransactionTypes = ['sales', 'purchases', 'taxes', 'contracted_services', 'providaded_services', 'payroll'];
+        if (!validTransactionTypes.includes(transaction_type)) {
+            return res.status(400).send('Invalid transaction type');
+        }
+
+        const query = `SELECT amount FROM ${transaction_type} WHERE id = $1`;
+        const values = [transaction_id];
+
+        const result = await db.query(query, values);
+        console.log("result: ", result)
+
+        if (result.rows.length === 0) {
+            return res.status(404).send('Amount not found');
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error("Error in getTransactionValue:", err.message);
+        res.status(500).send(err.message);
+    }
+};
 
 // Adicionar Telefone e Email caso necesário
 exports.createInstallment = async (req, res) => {

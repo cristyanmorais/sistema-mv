@@ -8,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../Functions";
 import { getTransactionTypeLabel } from "../Functions";
 
-// Formatar as Datas
-
 const Body = styled.div`
         // background-color: darkred;
         // height: 900px;
