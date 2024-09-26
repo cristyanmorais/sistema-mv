@@ -10,13 +10,11 @@ exports.getAllInstallments = async (req, res) => {
         if (transactionType) {
             query += ` AND transaction_type = $${values.length + 1}`;
             values.push(transactionType);
-            console.log("transaction type");
         }
 
         if (typeof paid !== 'undefined' && paid !== '') {
             query += ` AND paid = $${values.length + 1}`;
             values.push(paid === 'true');
-            console.log(" paid");
         }
 
         query += ' ORDER BY id';
@@ -74,7 +72,6 @@ exports.getTransactionValue = async (req, res) => {
         const values = [transaction_id];
 
         const result = await db.query(query, values);
-        console.log("result: ", result)
 
         if (result.rows.length === 0) {
             return res.status(404).send('Amount not found');
@@ -109,9 +106,9 @@ exports.createInstallment = async (req, res) => {
 
 exports.updateInstallment = async (req, res) => {
     const id = req.params.id;
-    const { transaction_id, transaction_type, installment_amount, due_date, paid, payment_date } = req.body;
-    const query = 'UPDATE installments SET transaction_id = $1, transaction_type = $2, installment_amount = $3, due_date = $4, paid = $5, payment_date = $6 WHERE id = $7;';
-    const values = [transaction_id, transaction_type, installment_amount, due_date, paid, payment_date, id];
+    const { transaction_id, transaction_type, installment_amount, due_date, paid } = req.body;
+    const query = 'UPDATE installments SET transaction_id = $1, transaction_type = $2, installment_amount = $3, due_date = $4, paid = $5 WHERE id = $6;';
+    const values = [transaction_id, transaction_type, installment_amount, due_date, paid, id];
     try {
         result = await db.query(query, values);
 
@@ -126,3 +123,22 @@ exports.updateInstallment = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+// exports.updateInstallmentPaid = async (req, res) => {
+//     const id = req.params.id;
+//     const query = 'UPDATE installments SET paid = true WHERE id = $1;';
+//     const values = [id];
+//     try {
+//         result = await db.query(query, values);
+
+//         if (result.rowCount !== 1) {
+//             console.error('Error while updating  Installment.');
+//             return res.status(500).json({ error: 'Error while updating  Installment.' });
+//         }
+
+//         res.status(201).json({ message: ' Installment updated!' });
+
+//     } catch (err) {
+//         res.status(500).send(err.message);
+//     }
+// }

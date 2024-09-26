@@ -18,14 +18,12 @@ const Installment = () => {
     const installmentId = location.state?.id;
     const [amount, setAmount] = useState(0);
     const [transaction, setTransaction] = useState({});
-    const [transactionId, setTransactionId] = useState(0);
-    const [transactionType, setTransactionType] = useState('');
 
     useEffect(() => {
-        // console.log("fetchTransaction");
         axios.get(`http://localhost:3000/api/installments/${installmentId}`)
         .then(response => {
             setTransaction(response.data);
+            console.log(response.data);
             fetchAmount(response.data.transaction_id, response.data.transaction_type.replace(/-/g, '_'));
         })
         .catch(error => console.error('Error: ', error));
@@ -37,7 +35,23 @@ const Installment = () => {
             setAmount(response.data.amount);
         })
         .catch(error => console.error('Error: ', error));
-    };    
+    };
+
+    const handlePayClick = () => {
+        const InstallmentData = {
+            transaction_id: transaction.transaction_id,
+            transaction_type: transaction.transaction_type,
+            installment_amount: transaction.installment_amount,
+            due_date: transaction.due_date,
+            paid: true
+        }
+
+        axios.put(`http://localhost:3000/api/installments/${installmentId}`, InstallmentData)
+            .then(response => {
+                console.log('Installment updated successfully:', response.data);
+            })
+            .catch(error => console.error('Error updating installment:', error));
+    };
 
     return (
         <Layout>
@@ -55,10 +69,16 @@ const Installment = () => {
                     <p>{transaction.transaction_type ? getTransactionTypeLabel(transaction.transaction_type) : null}</p>
                 </div>
                 <div>
+                    <h1>Status:</h1>
+                    <p>{transaction.paid === true ? "Fechado" : "Aberto"}</p>
+                </div>
+                <div>
                     <h1>Dados da Transação:</h1>
                     <p>ID: {transaction.id}</p>
                     <p>Valor: {amount}</p>
                 </div>
+
+                <button onClick={handlePayClick}>Pagar</button>
             </Body>
         </Layout>
     );

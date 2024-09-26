@@ -8,5 +8,6 @@ router.get('/:id', installmentsController.getInstallmentById);
 router.get('/amount/a', installmentsController.getTransactionValue);
 router.post('/', installmentsController.createInstallment);
 router.put('/:id', installmentsController.updateInstallment);
+// router.put('/:id/paid', installmentsController.updateInstallment);
 
 module.exports = router;
