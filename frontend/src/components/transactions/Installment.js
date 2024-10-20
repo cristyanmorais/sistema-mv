@@ -78,7 +78,7 @@ const Installment = () => {
                     <p>Valor: {amount}</p>
                 </div>
 
-                <button onClick={handlePayClick}>Pagar</button>
+                {transaction.paid === false ? <button onClick={handlePayClick}>Pagar</button> : null}
             </Body>
         </Layout>
     );

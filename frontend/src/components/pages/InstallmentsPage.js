@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
+import './installmentsPage.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,22 +13,21 @@ const Body = styled.div`
         // background-color: darkred;
         // height: 900px;
         display: flex;
-        justify-content: space-around;
-    `;
-
-    const FiltersContainer = styled.div`
-        margin-bottom: 20px;
+        flex-direction: column;
+        // justify-content: center;
+        align-items: center;
+        width: 100%;
     `;
 
     const Div = styled.div`
-        width: 500px;
+        // width: 500px;
         display: flex;
         flex-direction: column;
         text-align: center;
     `;
 
     const Table = styled.table`
-        tr:not(.title) {
+        tr:not(.title-row) {
             cursor: pointer;
         }
 
@@ -63,14 +63,14 @@ const InstallmentsPage = () => {
         }));
     }
 
-    const handleRowClick = (id, amount) => {
-        navigate('/installment-details', {state: { id, amount }});
+    const handleRowClick = (id) => {
+        navigate('/installment-details', {state: { id }});
     }
 
     return (
         <Layout>
             <Body>
-            <FiltersContainer>
+            <div className="filters-container">
                     <label>
                         Tipo de Transação:
                         <select value={filterTerm.transactionType} onChange={e => handleFilterChange('transactionType', e.target.value)}>
@@ -91,11 +91,11 @@ const InstallmentsPage = () => {
                             <option value="false">Aberto</option>
                         </select>
                     </label>
-                </FiltersContainer>
+                </div>
                 <Div>
-                    <Table>
+                    <Table className="installments-table">
                         <thead>
-                            <tr className="title">
+                            <tr className="title-row">
                                 <th>ID</th>
                                 <th>VALOR</th>
                                 <th>VENCIMENTO</th>

@@ -1,0 +1,44 @@
+.card {
+    display: flex;
+    background-color: #212139;
+    width: 220px;
+    height: 220px;
+    border-radius: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+    /* margin-left: 10px; */
+}
+
+.card p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.inst-card {
+    background-color: #e0c858;
+    width: 300px;
+    height: 120px;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    cursor: pointer;
+    transition: all ease 1s;
+}
+
+.inst-card:hover {
+    background-color: #ffd51b;
+}
+
+.inst-card p {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    color: #212139;
+}

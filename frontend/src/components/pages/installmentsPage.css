@@ -1,0 +1,38 @@
+.installments-table {
+    width: 1000px;
+}
+
+.installments-table thead {
+    font-size: 25px;
+    background-color: #212139;
+    color: #fff;
+}
+
+.installments-table tbody {
+    font-size: 20px;
+    text-align: center;
+}
+
+.installments-table td {
+    height: 30px;
+}
+
+.installments-table tr {
+    transition: all ease 1s;
+}
+
+.installments-table tr:not(.title-row):hover {
+    background-color: #9cbfe7;
+}
+
+.filters-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin: 25px 0;
+}
+
+.filters-container label {
+    display: flex;
+    flex-direction: column;
+}

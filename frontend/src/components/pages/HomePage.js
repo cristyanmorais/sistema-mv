@@ -4,9 +4,14 @@ import styled from 'styled-components';
 import Layout from '../Layout'
 import axios from "axios";
 import { getFormattedDate } from "../Functions";
+import { Card, InstCard } from "../VisualComponents";
+import { useNavigate } from "react-router-dom";
 
 const Body = styled.div`
-    
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
 `
 
 const HomePage = () => {
@@ -14,6 +19,8 @@ const HomePage = () => {
     const [positive, setPositive] = useState(0);
     const [negative, setNegative] = useState(0);
     const [nextInstallment, setNextInstallment] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchBalance();
@@ -38,18 +45,24 @@ const HomePage = () => {
 
     const fetchNextInstallment = () => {
         axios.get('http://localhost:3000/api/installments/next')
-        .then(response => setNextInstallment(response.data))
+        .then(response => {setNextInstallment(response.data); console.log(response.data)})
         .catch(error => console.error('Error: ', error));
+    }
+
+    const handleInstClick = (id) => {
+        navigate('/installment-details', {state: { id }});
     }
 
     return (
         <Layout>
             <Body>
-                <p>homepage</p>
-                <p>Saldo: {balance}</p>
-                <p>Entradas: {positive}</p>
-                <p>Saídas: {negative}</p>
-                <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p>
+                <div style={{display: "flex", justifyContent: "space-around", width: "70%"}}>
+                    <Card title="Saldo:" content={balance} />
+                    <Card title="Entradas:" content={positive} />
+                    <Card title="Saídas:" content={negative} />
+                </div>
+                {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} content={getFormattedDate(nextInstallment.due_date)} /> : null}
+                {/* <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p> */}
             </Body>
         </Layout>
     );

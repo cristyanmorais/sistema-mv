@@ -1,0 +1,51 @@
+.transaction-table {
+    width: 1000px;
+}
+
+.transaction-table thead {
+    font-size: 25px;
+    background-color: #212139;
+    color: #fff;
+}
+
+.transaction-table tbody {
+    font-size: 20px;
+    text-align: center;
+}
+
+.transaction-table td {
+    height: 30px;
+}
+
+.transaction-table tr {
+    transition: all ease 1s;
+}
+
+.transaction-table tr:not(.title-row):hover {
+    background-color: #9cbfe7;
+}
+
+.registro-btn {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+    width: 75px;
+    height: 75px;
+    text-align: center;
+    border: #212139 solid 5px;
+    color: #212139;
+    background-color: transparent;
+    border-radius: 50%;
+    font-size: 65px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 1s ease;
+}
+
+.registro-btn:hover {
+    background-color: #212139;
+    color: #fff;
+}

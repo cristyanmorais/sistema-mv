@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
+import './transactionPage.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate, getTransactionTypeLabel } from "../Functions";
+
 
 const Body = styled.div`
         // background-color: lightblue;
@@ -47,7 +49,7 @@ const Body = styled.div`
     `;
 
     const Table = styled.table`
-        tr:not(.title) {
+        tr:not(.title-row) {
             cursor: pointer;
         }
 
@@ -92,30 +94,34 @@ const TransactionPage = () => {
                     </select>
                 </TransactionType>
 
-                <Table>
+                <Table className="transaction-table">
                         <thead>
-                            <tr className="title">
+                            <tr className="title-row">
                                 <th>ID</th>
+                                <th>DESCRIÇÃO</th>
                                 <th>VALOR</th>
                                 <th>VENCIMENTO</th>
                                 <th>PARCELAS</th>
                                 <th>PAGO</th>
-                                <th>DESCRIÇÃO</th>
                             </tr>
                         </thead>
                         <tbody>
                             {transactions.map((transaction, index) => (
                                 <tr key={transaction.id} onClick={() => handleRowClick(transaction.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
                                     <td>{transaction.id}</td>
+                                    <td>{transaction.description}</td>
                                     <td>{transaction.amount}</td>
                                     <td>{transaction.date ? getFormattedDate(transaction.date) : null}</td>
                                     <td>{transaction.num_installments}</td>
                                     <td>{transaction.paid === true ? "Fechado" : "Aberto"}</td>
-                                    <td>{transaction.description}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
+
+                    <button className="registro-btn" onClick={() => navigate('/new-transaction')}>
+                        +
+                    </button>
                 
             </Body>
         </Layout>
