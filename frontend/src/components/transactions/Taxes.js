@@ -47,7 +47,7 @@ const Taxes = () => {
             const data = {
                 taxes_type_id: taxTypeId,
                 amount: Number(amount),
-                date,
+                tax_date: date,
                 description,
                 num_installments: numInstallments,
                 paid

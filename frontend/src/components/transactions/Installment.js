@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
+import './installment.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -11,6 +12,7 @@ import { getTransactionTypeLabel } from "../Functions";
 const Body = styled.div`
         // background-color: darkred;
         // height: 900px;
+        padding-left: 200px
     `;
 
 const Installment = () => {
@@ -55,17 +57,21 @@ const Installment = () => {
 
     return (
         <Layout>
-            <Body>
+            <Body className="inst-body">
+                <div>
+                    <h1>ID:</h1>
+                    <p>{transaction.id}</p>
+                </div>
                 <div>
                     <h1>Valor:</h1>
                     <p>{transaction.installment_amount}</p>
                 </div>
                 <div>
-                    <h1>Data de vencimento:</h1>
+                    <h1>Vencimento:</h1>
                     <p>{transaction.due_date ? getFormattedDate(transaction.due_date) : null}</p>
                 </div>
                 <div>
-                    <h1>Tipo de Transação:</h1>
+                    <h1>Tipo:</h1>
                     <p>{transaction.transaction_type ? getTransactionTypeLabel(transaction.transaction_type) : null}</p>
                 </div>
                 <div>
@@ -74,11 +80,11 @@ const Installment = () => {
                 </div>
                 <div>
                     <h1>Dados da Transação:</h1>
-                    <p>ID: {transaction.id}</p>
+                    <p>ID: {transaction.transaction_id}</p>
                     <p>Valor: {amount}</p>
                 </div>
 
-                {transaction.paid === false ? <button onClick={handlePayClick}>Pagar</button> : null}
+                {transaction.paid === false ? <button className="pagar-btn" onClick={handlePayClick}>PAGAR</button> : null}
             </Body>
         </Layout>
     );

@@ -72,7 +72,7 @@ const Register = () => {
                 <TransactionType>
                     <label>Cadastro:</label>
                     <select value={selectedType} onChange={e => setSelectedType(e.target.value)}>
-                        <option value={0}>Selecione uma transação</option>
+                        <option value={0}>Selecione um</option>
                         <option value="clients">Clientes</option>
                         <option value="companies">Empresas</option>
                         <option value="employees">Funcionários</option>

@@ -51,7 +51,7 @@ const ProvidedServices = () => {
         const data = {
             client_id: clientId,
             amount: Number(amount),
-            date,
+            service_date: date,
             description,
             num_installments: numInstallments,
             paid

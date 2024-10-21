@@ -23,9 +23,7 @@ CREATE TABLE companies (
 -- Criação da tabela clients (Clientes)
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    telephone varchar,
-    email varchar
+    name VARCHAR(100) NOT NULL
 );
 
 -- Criação da tabela sales (Vendas)
@@ -33,9 +31,9 @@ CREATE TABLE sales (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
     work_id INT NOT NULL REFERENCES works (id),
-    description TEXT,
+    description TEXT NOT NULL,
     sale_date DATE NOT NULL,
-    num_installments INT DEFAULT 0,
+    num_installments INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -47,7 +45,7 @@ CREATE TABLE purchases (
     description TEXT,
     company_id INT NOT NULL REFERENCES companies (id),
     purchase_date DATE NOT NULL,
-    num_installments INT DEFAULT 0,
+    num_installments INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -59,7 +57,7 @@ CREATE TABLE installments (
     transaction_type VARCHAR(50) NOT NULL,
     installment_amount NUMERIC(12, 2) NOT NULL,
     due_date DATE NOT NULL,
-    paid BOOLEAN DEFAULT FALSE,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
     payment_date DATE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -69,9 +67,11 @@ CREATE TABLE installments (
 CREATE TABLE payroll (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
-    description TEXT,
-    num_installments INT DEFAULT 0,
+    description TEXT NOT NULL,
+    num_installments INT DEFAULT 1,
     payroll_date DATE NOT NULL,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
+    employee_id INT NOT NULL REFERENCES employees (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -81,9 +81,10 @@ CREATE TABLE provided_services (
     id SERIAL PRIMARY KEY,
     amount NUMERIC(12, 2) NOT NULL,
     client_id INT NOT NULL REFERENCES clients (id),
-    description TEXT,
-    num_installments INT DEFAULT 0,
+    description TEXT NOT NULL,
+    num_installments INT DEFAULT 1,
     service_date DATE NOT NULL,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -94,8 +95,9 @@ CREATE TABLE contracted_services (
     amount NUMERIC(12, 2) NOT NULL,
     employee_id INT NOT NULL REFERENCES employees (id),
     work_id INT NOT NULL REFERENCES works (id),
-    num_installments INT DEFAULT 0,
-    description TEXT,
+    num_installments INT DEFAULT 1,
+    description TEXT NOT NULL,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
     service_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -109,10 +111,13 @@ create table taxes_type(
 create table taxes(
 	id SERIAL PRIMARY KEY,
 	amount NUMERIC(12, 2) NOT NULL,
-    description TEXT,
-    num_installments INT DEFAULT 0,
+    description TEXT NOT NULL,
+    num_installments INT DEFAULT 1,
+    paid BOOLEAN NOT NULL DEFAULT FALSE,
     tax_date DATE DEFAULT CURRENT_TIMESTAMP,
-	taxes_type_id INT NOT NULL REFERENCES taxes_type (id)
+	taxes_type_id INT NOT NULL REFERENCES taxes_type (id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 insert into taxes_type (name)

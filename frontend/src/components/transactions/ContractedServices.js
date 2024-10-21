@@ -60,7 +60,7 @@ const ContractedServices = () => {
             employee_id: employeeId,
             work_id: workId,
             amount: Number(amount),
-            date,
+            service_date: date,
             description,
             num_installments: numInstallments,
             paid
