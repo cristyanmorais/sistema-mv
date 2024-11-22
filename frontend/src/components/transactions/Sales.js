@@ -17,7 +17,7 @@ const Sales = () => {
     const [workIdInput, setWorkIdInput] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/works')
+        axios.get('http://192.168.1.246:3000/api/works')
         .then(response => setWorks(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -37,15 +37,15 @@ const Sales = () => {
     }, [workId, amount, date, description, numInstallments])
 
     const handleWorkChange = (e) => {
-        const selectedWorkId = e.target.value;
+        const selectedWorkId = parseInt(e.target.value, 10); // Converte para número
         setWorkId(selectedWorkId);
-        setWorkIdInput(selectedWorkId); // Sincroniza o campo de input de ID
+        setWorkIdInput(selectedWorkId.toString()); // Sincroniza o campo de input de ID
     };
-
+    
     const handleWorkIdInputChange = (e) => {
-        const inputId = e.target.value;
+        const inputId = parseInt(e.target.value, 10) || 0; // Converte para número ou 0 se inválido
         setWorkId(inputId);
-        setWorkIdInput(inputId);
+        setWorkIdInput(inputId.toString());
     };
 
     const clearFields = () => {
@@ -63,47 +63,53 @@ const Sales = () => {
             amount: Number(amount),
             date,
             description,
-            num_installments: numInstallments,
+            num_installments: Number(numInstallments),
             paid
         }
 
         const sendSalesData = (data) => {
-            return axios.post('http://localhost:3000/api/sales', data)
+            return axios.post('http://192.168.1.246:3000/api/sales', data)
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
+            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
         };
 
         const handleInstallment = (saleId) => {
             const installmentData = {
                 transaction_id: saleId,
                 transaction_type: 'sales',
-                installment_amount: amount/numInstallments,
+                installment_amount: amount / numInstallments,
                 due_date: date,
                 paid
-            }
-
-            const originalYear = parseInt(date.substring(0, 4));
-            const originalMonth = parseInt(date.substring(5, 7));
-
+            };
+        
+            let dueDate = new Date(date); // Cria a data inicial a partir do valor selecionado
+        
             for (let i = 0; i < numInstallments; i++) {
-                const newMonth = ((originalMonth + i - 1) % 12) + 1;
-                const newYear = originalYear + Math.floor((originalMonth + i - 1) / 12);
-                const formattedMonth = newMonth.toString().padStart(2, '0');
-                
-                installmentData.due_date = `${newYear}-${formattedMonth}${date.substring(7)}`;
-                console.log(installmentData.due_date);
-
-                axios.post('http://localhost:3000/api/installments', installmentData)
-                .then(response => {
-                    console.log("Installment " + (i + 1) + " succefully created: ", response.data);
-                })
-                .catch(error => {
-                    console.error("Error while sending Installment " + (i + 1) + ": ", error);
-                })
+                if (i > 0) {
+                    // A partir do segundo installment, adiciona 30 dias à data
+                    dueDate.setDate(dueDate.getDate() + 30);
+                }
+        
+                // Formata a nova data no formato YYYY-MM-DD
+                const newDueDate = dueDate.toISOString().split('T')[0];
+                installmentData.due_date = newDueDate;
+        
+                console.log(`Installment ${i + 1} due date: ${newDueDate}`);
+        
+                // Envia os dados da parcela para a API
+                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                    .then(response => {
+                        console.log(`Installment ${i + 1} successfully created: `, response.data);
+                    })
+                    .catch(error => {
+                        console.error(`Error while sending Installment ${i + 1}: `, error);
+                    });
             }
-        }
+        };
+        
+        
 
         sendSalesData(data)
             .then(response => {

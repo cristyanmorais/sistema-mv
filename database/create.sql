@@ -32,7 +32,7 @@ CREATE TABLE sales (
     amount NUMERIC(12, 2) NOT NULL,
     work_id INT NOT NULL REFERENCES works (id),
     description TEXT NOT NULL,
-    sale_date DATE NOT NULL,
+    date DATE NOT NULL,
     num_installments INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -44,7 +44,7 @@ CREATE TABLE purchases (
     amount NUMERIC(12, 2) NOT NULL,
     description TEXT,
     company_id INT NOT NULL REFERENCES companies (id),
-    purchase_date DATE NOT NULL,
+    date DATE NOT NULL,
     num_installments INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -69,7 +69,7 @@ CREATE TABLE payroll (
     amount NUMERIC(12, 2) NOT NULL,
     description TEXT NOT NULL,
     num_installments INT DEFAULT 1,
-    payroll_date DATE NOT NULL,
+    date DATE NOT NULL,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
     employee_id INT NOT NULL REFERENCES employees (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -83,7 +83,7 @@ CREATE TABLE provided_services (
     client_id INT NOT NULL REFERENCES clients (id),
     description TEXT NOT NULL,
     num_installments INT DEFAULT 1,
-    service_date DATE NOT NULL,
+    date DATE NOT NULL,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -98,7 +98,7 @@ CREATE TABLE contracted_services (
     num_installments INT DEFAULT 1,
     description TEXT NOT NULL,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
-    service_date DATE NOT NULL,
+    date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -114,7 +114,7 @@ create table taxes(
     description TEXT NOT NULL,
     num_installments INT DEFAULT 1,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
-    tax_date DATE DEFAULT CURRENT_TIMESTAMP,
+    date DATE DEFAULT CURRENT_TIMESTAMP,
 	taxes_type_id INT NOT NULL REFERENCES taxes_type (id),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -17,7 +17,7 @@ exports.getAllInstallments = async (req, res) => {
             values.push(paid === 'true');
         }
 
-        query += ' ORDER BY id';
+        query += ' ORDER BY due_date';
 
         const result = await db.query(query, values);
         res.json(result.rows);
@@ -63,7 +63,7 @@ exports.getTransactionValue = async (req, res) => {
         // console.log("Transaction Type: ", transaction_type);
         // console.log("Transaction ID: ", transaction_id);
 
-        const validTransactionTypes = ['sales', 'purchases', 'taxes', 'contracted_services', 'providaded_services', 'payroll'];
+        const validTransactionTypes = ['sales', 'purchases', 'taxes', 'contracted_services', 'provided_services', 'payroll'];
         if (!validTransactionTypes.includes(transaction_type)) {
             return res.status(400).send('Invalid transaction type');
         }

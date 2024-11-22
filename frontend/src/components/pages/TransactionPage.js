@@ -69,13 +69,13 @@ const TransactionPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/${selectedType}`)
-        .then(response => setTransactions(response.data))
+        axios.get(`http://192.168.1.246:3000/api/${selectedType}`)
+        .then(response => {setTransactions(response.data); console.log(response.data)})
         .catch(error => console.error('Error: ', error));
     }, [selectedType])
 
-    const handleRowClick = (id, amount) => {
-        navigate('/transaction-details', {state: { id, amount }});
+    const handleRowClick = (id, type) => {
+        navigate('/transaction-details', {state: { id, type }});
     }
 
     return (
@@ -107,7 +107,7 @@ const TransactionPage = () => {
                         </thead>
                         <tbody>
                             {transactions.map((transaction, index) => (
-                                <tr key={transaction.id} onClick={() => handleRowClick(transaction.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                <tr key={transaction.id} onClick={() => handleRowClick(transaction.id, selectedType)} className={index % 2 === 0 ? 'even' : 'odd'}>
                                     <td>{transaction.id}</td>
                                     <td>{transaction.description}</td>
                                     <td>{transaction.amount}</td>

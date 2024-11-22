@@ -26,9 +26,9 @@ exports.getPayrollById = async (req, res) => {
 }
 
 exports.createPayroll = async (req, res) => {
-    const { amount, payroll_date, employee_id, num_installments, description, paid } = req.body;
-    const query = 'INSERT INTO payroll (amount, payroll_date, num_installments, description, employee_id, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
-    const values = [amount, payroll_date, num_installments, description, employee_id, paid];
+    const { amount, date, employee_id, num_installments, description, paid } = req.body;
+    const query = 'INSERT INTO payroll (amount, date, num_installments, description, employee_id, paid) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id;';
+    const values = [amount, date, num_installments, description, employee_id, paid];
     try {
         result = await db.query(query, values);
 
@@ -48,9 +48,9 @@ exports.createPayroll = async (req, res) => {
 
 exports.updatePayroll = async (req, res) => {
     const id = req.params.id;
-    const { amount, payroll_date, num_installments, description, employee_id, paid } = req.body;
-    const query = 'UPDATE payroll SET amount = $1, payroll_date = $2, num_installments = $3, description = $4, employee_id = $5, paid = $6 WHERE id = $7;';
-    const values = [ amount, payroll_date, num_installments, description, employee_id, paid, id ];
+    const { amount, date, num_installments, description, employee_id, paid } = req.body;
+    const query = 'UPDATE payroll SET amount = $1, date = $2, num_installments = $3, description = $4, employee_id = $5, paid = $6 WHERE id = $7;';
+    const values = [ amount, date, num_installments, description, employee_id, paid, id ];
     try {
         result = await db.query(query, values);
 
@@ -65,3 +65,23 @@ exports.updatePayroll = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.updatePayrollPaid = async (req, res) => {
+    const id = req.params.id;
+    const { paid } = req.body; // apenas o campo 'paid' é necessário
+    const query = 'UPDATE payroll SET paid = $1 WHERE id = $2;';
+    const values = [paid, id];
+    try {
+        const result = await db.query(query, values);
+
+        if (result.rowCount !== 1) {
+            console.error('Error while updating Payroll.');
+            return res.status(500).json({ error: 'Error while updating Payroll.' });
+        }
+
+        res.status(200).json({ message: 'Payroll status updated!' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};

@@ -67,3 +67,23 @@ exports.updateSale = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.updateSalePaid = async (req, res) => {
+    const id = req.params.id;
+    const { paid } = req.body; // apenas o campo 'paid' é necessário
+    const query = 'UPDATE sales SET paid = $1 WHERE id = $2;';
+    const values = [paid, id];
+    try {
+        const result = await db.query(query, values);
+
+        if (result.rowCount !== 1) {
+            console.error('Error while updating Sale.');
+            return res.status(500).json({ error: 'Error while updating Sale.' });
+        }
+
+        res.status(200).json({ message: 'Sale status updated!' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};

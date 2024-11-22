@@ -78,7 +78,7 @@ export const Body = styled.div`
 
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
+            // -webkit-appearance: none;
             margin: 0;
         }
 

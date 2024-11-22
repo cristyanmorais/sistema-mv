@@ -15,7 +15,7 @@ const Taxes = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/taxes-type')
+        axios.get('http://192.168.1.246:3000/api/taxes-type')
         .then(response => setTaxTypes(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -35,6 +35,7 @@ const Taxes = () => {
     }
 
     const clearFields = () => {
+        console.log("clearFields");
         setTaxTypeId(0);
         setAmount('');
         setDate('');
@@ -47,49 +48,53 @@ const Taxes = () => {
             const data = {
                 taxes_type_id: taxTypeId,
                 amount: Number(amount),
-                tax_date: date,
+                date,
                 description,
                 num_installments: numInstallments,
                 paid
             }
             
             const sendTaxesData = (data) => {
-                return axios.post('http://localhost:3000/api/taxes', data);
+                return axios.post('http://192.168.1.246:3000/api/taxes', data);
             };
             
             const sendCashRegisterData = (cashRegisterData) => {
-                return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
+                return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
             };
 
             const handleInstallment = (taxId) => {
                 const installmentData = {
                     transaction_id: taxId,
                     transaction_type: 'taxes',
-                    installment_amount: amount/numInstallments,
+                    installment_amount: amount / numInstallments,
                     due_date: date,
                     paid
-                }
-    
-                const originalYear = parseInt(date.substring(0, 4));
-                const originalMonth = parseInt(date.substring(5, 7));
-    
+                };
+            
+                let dueDate = new Date(date); // Cria a data inicial a partir do valor selecionado
+            
                 for (let i = 0; i < numInstallments; i++) {
-                    const newMonth = ((originalMonth + i - 1) % 12) + 1;
-                    const newYear = originalYear + Math.floor((originalMonth + i - 1) / 12);
-                    const formattedMonth = newMonth.toString().padStart(2, '0');
-                    
-                    installmentData.due_date = `${newYear}-${formattedMonth}${date.substring(7)}`;
-                    console.log(installmentData.due_date);
-    
-                    axios.post('http://localhost:3000/api/installments', installmentData)
-                    .then(response => {
-                        console.log("Installment " + (i + 1) + " succefully created: ", response.data);
-                    })
-                    .catch(error => {
-                        console.error("Error while sending Installment " + (i + 1) + ": ", error);
-                    })
+                    if (i > 0) {
+                        // A partir do segundo installment, adiciona 30 dias à data
+                        dueDate.setDate(dueDate.getDate() + 30);
+                    }
+            
+                    // Formata a nova data no formato YYYY-MM-DD
+                    const newDueDate = dueDate.toISOString().split('T')[0];
+                    installmentData.due_date = newDueDate;
+            
+                    console.log(`Installment ${i + 1} due date: ${newDueDate}`);
+            
+                    // Envia os dados da parcela para a API
+                    axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                        .then(response => {
+                            console.log(`Installment ${i + 1} successfully created: `, response.data);
+                        })
+                        .catch(error => {
+                            console.error(`Error while sending Installment ${i + 1}: `, error);
+                        });
                 }
-            }
+            };
             
             sendTaxesData(data)
                 .then(response => {
@@ -111,11 +116,11 @@ const Taxes = () => {
                         sendCashRegisterData(cashRegisterData)
                         .then(response => {
                             console.log("Cash Register request successfully sent: ", response.data);
+                            
+                            clearFields();
                         })
                         .catch(error => {
                             console.error("Error while sending Cash Register: ", error);
-                            
-                            clearFields();
                         });
                     } else {
                         handleInstallment(response.data.id);

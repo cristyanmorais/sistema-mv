@@ -15,7 +15,7 @@ const Purchases = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/companies')
+        axios.get('http://192.168.1.246:3000/api/companies')
         .then(response => setCompanies(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -53,39 +53,55 @@ const Purchases = () => {
                 amount: Number(amount),
                 date,
                 description,
-                num_installments: numInstallments,
+                num_installments: Number(numInstallments),
                 paid
             }
             
             const sendPurchasesData = (data) => {
-                return axios.post('http://localhost:3000/api/purchases', data)
+                return axios.post('http://192.168.1.246:3000/api/purchases', data)
             };
             
             const sendCashRegisterData = (cashRegisterData) => {
-                return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
+                return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
             };
     
             const handleInstallment = (purchaseId) => {
-                const data = {
+                const installmentData = {
                     transaction_id: purchaseId,
                     transaction_type: 'purchases',
-                    installment_amount: amount/numInstallments,
-                    due_date: "2024-01-01",
+                    installment_amount: amount / numInstallments,
+                    due_date: date,
                     paid
+                };
+            
+                let dueDate = new Date(date); // Cria a data inicial a partir do valor selecionado
+            
+                for (let i = 0; i < numInstallments; i++) {
+                    if (i > 0) {
+                        // A partir do segundo installment, adiciona 30 dias à data
+                        dueDate.setDate(dueDate.getDate() + 30);
+                    }
+            
+                    // Formata a nova data no formato YYYY-MM-DD
+                    const newDueDate = dueDate.toISOString().split('T')[0];
+                    installmentData.due_date = newDueDate;
+            
+                    console.log(`Installment ${i + 1} due date: ${newDueDate}`);
+            
+                    // Envia os dados da parcela para a API
+                    axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                        .then(response => {
+                            console.log(`Installment ${i + 1} successfully created: `, response.data);
+                        })
+                        .catch(error => {
+                            console.error(`Error while sending Installment ${i + 1}: `, error);
+                        });
                 }
-        
-                axios.post('http://localhost:3000/api/installments', data)
-                .then(response => {
-                    console.log("Installment succefully created: ", response.data);
-                })
-                .catch(error => {
-                    console.error("Error while sending Installment: ", error);
-                })
-            }
+            };
     
             sendPurchasesData(data)
                 .then(response => {
-                    console.log("Sale successfully created: ", response.data);
+                    console.log("purchase successfully created: ", response.data);
     
                     const cashRegisterData = {
                         transaction_type: "purchases",
@@ -109,6 +125,9 @@ const Purchases = () => {
                         .catch(error => {
                             console.error("Error while sending Cash Register: ", error);
                         });
+                    } else {
+                        handleInstallment(response.data.id);
+                        clearFields();
                     }
                 })
     }

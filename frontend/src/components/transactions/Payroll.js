@@ -15,7 +15,7 @@ const Payroll = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/employees')
+        axios.get('http://192.168.1.246:3000/api/employees')
         .then(response => setEmployees(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -51,49 +51,53 @@ const Payroll = () => {
         const data = {
             employee_id: employeeId,
             amount: Number(amount),
-            payroll_date: date,
+            date,
             description,
             num_installments: numInstallments,
             paid
         }
 
         const sendPayrollData = (data) => {
-            return axios.post('http://localhost:3000/api/payroll', data);
+            return axios.post('http://192.168.1.246:3000/api/payroll', data);
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
+            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
         };
 
         const handleInstallment = (payrollId) => {
             const installmentData = {
                 transaction_id: payrollId,
                 transaction_type: 'payroll',
-                installment_amount: amount/numInstallments,
+                installment_amount: amount / numInstallments,
                 due_date: date,
                 paid
-            }
-
-            const originalYear = parseInt(date.substring(0, 4));
-            const originalMonth = parseInt(date.substring(5, 7));
-
+            };
+        
+            let dueDate = new Date(date); // Cria a data inicial a partir do valor selecionado
+        
             for (let i = 0; i < numInstallments; i++) {
-                const newMonth = ((originalMonth + i - 1) % 12) + 1;
-                const newYear = originalYear + Math.floor((originalMonth + i - 1) / 12);
-                const formattedMonth = newMonth.toString().padStart(2, '0');
-                
-                installmentData.due_date = `${newYear}-${formattedMonth}${date.substring(7)}`;
-                console.log(installmentData.due_date);
-
-                axios.post('http://localhost:3000/api/installments', installmentData)
-                .then(response => {
-                    console.log("Installment " + (i + 1) + " succefully created: ", response.data);
-                })
-                .catch(error => {
-                    console.error("Error while sending Installment " + (i + 1) + ": ", error);
-                })
+                if (i > 0) {
+                    // A partir do segundo installment, adiciona 30 dias à data
+                    dueDate.setDate(dueDate.getDate() + 30);
+                }
+        
+                // Formata a nova data no formato YYYY-MM-DD
+                const newDueDate = dueDate.toISOString().split('T')[0];
+                installmentData.due_date = newDueDate;
+        
+                console.log(`Installment ${i + 1} due date: ${newDueDate}`);
+        
+                // Envia os dados da parcela para a API
+                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                    .then(response => {
+                        console.log(`Installment ${i + 1} successfully created: `, response.data);
+                    })
+                    .catch(error => {
+                        console.error(`Error while sending Installment ${i + 1}: `, error);
+                    });
             }
-        }
+        };
         
         sendPayrollData(data)
             .then(response => {

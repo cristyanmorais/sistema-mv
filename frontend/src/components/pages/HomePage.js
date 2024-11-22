@@ -29,13 +29,13 @@ const HomePage = () => {
     }, []);
 
     const fetchBalance = () => {
-        axios.get('http://localhost:3000/api/cash-register')
+        axios.get('http://192.168.1.246:3000/api/cash-register')
         .then(response => setBalance(response.data[0].balance))
         .catch(error => console.error('Error: ', error));
     }
 
     const fetchTransactions = () => {
-        axios.get('http://localhost:3000/api/cash-register/transactions')
+        axios.get('http://192.168.1.246:3000/api/cash-register/transactions')
         .then(response => {
             setPositive(response.data.positive);
             setNegative(response.data.negative);
@@ -44,7 +44,7 @@ const HomePage = () => {
     }
 
     const fetchNextInstallment = () => {
-        axios.get('http://localhost:3000/api/installments/next')
+        axios.get('http://192.168.1.246:3000/api/installments/next')
         .then(response => {setNextInstallment(response.data); console.log(response.data)})
         .catch(error => console.error('Error: ', error));
     }

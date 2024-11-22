@@ -49,7 +49,7 @@ const InstallmentsPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/installments', {
+        axios.get('http://192.168.1.246:3000/api/installments', {
             params: filterTerm
         })
         .then(response => setInstallments(response.data))

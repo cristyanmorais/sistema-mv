@@ -65,3 +65,23 @@ exports.updatePurchase = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.updatePurchasePaid = async (req, res) => {
+    const id = req.params.id;
+    const { paid } = req.body; // apenas o campo 'paid' é necessário
+    const query = 'UPDATE purchases SET paid = $1 WHERE id = $2;';
+    const values = [paid, id];
+    try {
+        const result = await db.query(query, values);
+
+        if (result.rowCount !== 1) {
+            console.error('Error while updating Purchase.');
+            return res.status(500).json({ error: 'Error while updating Purchase.' });
+        }
+
+        res.status(200).json({ message: 'Purchase status updated!' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};

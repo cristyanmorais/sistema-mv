@@ -18,11 +18,11 @@ const ContractedServices = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/employees')
+        axios.get('http://192.168.1.246:3000/api/employees')
         .then(response => setEmployees(response.data))
         .catch(error => console.error('Error: ', error));
 
-        axios.get('http://localhost:3000/api/works')
+        axios.get('http://192.168.1.246:3000/api/works')
         .then(response => setWorks(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -60,49 +60,53 @@ const ContractedServices = () => {
             employee_id: employeeId,
             work_id: workId,
             amount: Number(amount),
-            service_date: date,
+            date,
             description,
             num_installments: numInstallments,
             paid
         }
         
         const sendContractedServiceData = (data) => {
-            return axios.post('http://localhost:3000/api/contracted-services', data);
+            return axios.post('http://192.168.1.246:3000/api/contracted-services', data);
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://localhost:3000/api/cash-register', cashRegisterData);
+            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
         };
 
         const handleInstallment = (contractedServicesId) => {
             const installmentData = {
                 transaction_id: contractedServicesId,
                 transaction_type: 'contracted-services',
-                installment_amount: amount/numInstallments,
+                installment_amount: amount / numInstallments,
                 due_date: date,
                 paid
-            }
-
-            const originalYear = parseInt(date.substring(0, 4));
-            const originalMonth = parseInt(date.substring(5, 7));
-
+            };
+        
+            let dueDate = new Date(date); // Cria a data inicial a partir do valor selecionado
+        
             for (let i = 0; i < numInstallments; i++) {
-                const newMonth = ((originalMonth + i - 1) % 12) + 1;
-                const newYear = originalYear + Math.floor((originalMonth + i - 1) / 12);
-                const formattedMonth = newMonth.toString().padStart(2, '0');
-                
-                installmentData.due_date = `${newYear}-${formattedMonth}${date.substring(7)}`;
-                console.log(installmentData.due_date);
-
-                axios.post('http://localhost:3000/api/installments', installmentData)
-                .then(response => {
-                    console.log("Installment " + (i + 1) + " succefully created: ", response.data);
-                })
-                .catch(error => {
-                    console.error("Error while sending Installment " + (i + 1) + ": ", error);
-                })
+                if (i > 0) {
+                    // A partir do segundo installment, adiciona 30 dias à data
+                    dueDate.setDate(dueDate.getDate() + 30);
+                }
+        
+                // Formata a nova data no formato YYYY-MM-DD
+                const newDueDate = dueDate.toISOString().split('T')[0];
+                installmentData.due_date = newDueDate;
+        
+                console.log(`Installment ${i + 1} due date: ${newDueDate}`);
+        
+                // Envia os dados da parcela para a API
+                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                    .then(response => {
+                        console.log(`Installment ${i + 1} successfully created: `, response.data);
+                    })
+                    .catch(error => {
+                        console.error(`Error while sending Installment ${i + 1}: `, error);
+                    });
             }
-        }
+        };
         
         sendContractedServiceData(data)
             .then(response => {

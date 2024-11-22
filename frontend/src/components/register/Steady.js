@@ -19,7 +19,7 @@ export const Clients = () => {
             name
         }
 
-        axios.post('http://localhost:3000/api/clients', data)
+        axios.post('http://192.168.1.246:3000/api/clients', data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {
@@ -75,7 +75,7 @@ export const Companies = () => {
             fantasy_name: fantasyName
         }
 
-        axios.post('http://localhost:3000/api/companies', data)
+        axios.post('http://192.168.1.246:3000/api/companies', data)
         .catch(error => {
             console.error("Error while creating Company: ", error);
         }).then(response => {
@@ -139,7 +139,7 @@ export const Employees = () => {
             cpf
         }
 
-        axios.post('http://localhost:3000/api/employees', data)
+        axios.post('http://192.168.1.246:3000/api/employees', data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {
@@ -188,7 +188,7 @@ export const Works = () => {
             address
         }
 
-        axios.post('http://localhost:3000/api/works', data)
+        axios.post('http://192.168.1.246:3000/api/works', data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {

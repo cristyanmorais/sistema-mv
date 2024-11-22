@@ -7,6 +7,7 @@ import InstallmentsPage from './components/pages/InstallmentsPage';
 import Installments from './components/transactions/Installment';
 import NewTransaction from './components/transactions/NewTransaction';
 import Register from './components/pages/RegisterPage'
+import TransactionDetails from './components/transactions/TransactionDetails';
 
 const Router = () => {
     return (
@@ -15,7 +16,7 @@ const Router = () => {
                 <Route path='/' Component={HomePage} />
                 <Route path='/transaction' Component={TransactionPage} />
                 <Route path='/new-transaction' Component={NewTransaction} />
-                {/* <Route path='/transaction-details' Component={} /> */}
+                <Route path='/transaction-details' Component={TransactionDetails} />
                 <Route path='/installments' Component={InstallmentsPage} />
                 <Route path='/installment-details' Component={Installments} />
                 <Route path='/register' Component={Register} />

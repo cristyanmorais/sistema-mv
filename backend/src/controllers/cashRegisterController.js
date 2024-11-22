@@ -32,7 +32,7 @@ exports.getCashRegisterTransactions = async (req, res) => {
         const result = await db.query('SELECT * FROM cash_register');
 
         for (row in result.rows) {
-            if (result.rows[row].transaction_type === "contracted_services" || result.rows[row].transaction_type === "payroll" || result.rows[row].transaction_type === "purchases" || result.rows[row].transaction_type === "taxes") {
+            if (result.rows[row].transaction_type === "contracted-services" || result.rows[row].transaction_type === "payroll" || result.rows[row].transaction_type === "purchases" || result.rows[row].transaction_type === "taxes") {
                 negative += Number(result.rows[row].amount);
             } else {
                 positive += Number(result.rows[row].amount);
