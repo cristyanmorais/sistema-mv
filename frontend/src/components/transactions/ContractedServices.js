@@ -4,6 +4,7 @@ import { Body } from '../Teste';
 import Installment from '../InstallmentField';
 
 const ContractedServices = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [employeeId, setEmployeeId] = useState(0);
     const [workId, setWorkId] = useState(0);
     const [amount, setAmount] = useState('');
@@ -18,11 +19,11 @@ const ContractedServices = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/employees')
+        axios.get(`${BASE_URL}/api/employees`)
         .then(response => setEmployees(response.data))
         .catch(error => console.error('Error: ', error));
 
-        axios.get('http://192.168.1.246:3000/api/works')
+        axios.get(`${BASE_URL}/api/works`)
         .then(response => setWorks(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -67,11 +68,11 @@ const ContractedServices = () => {
         }
         
         const sendContractedServiceData = (data) => {
-            return axios.post('http://192.168.1.246:3000/api/contracted-services', data);
+            return axios.post(`${BASE_URL}/api/contracted-services`, data);
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
+            return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData);
         };
 
         const handleInstallment = (contractedServicesId) => {
@@ -98,7 +99,7 @@ const ContractedServices = () => {
                 console.log(`Installment ${i + 1} due date: ${newDueDate}`);
         
                 // Envia os dados da parcela para a API
-                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                axios.post(`${BASE_URL}/api/installments`, installmentData)
                     .then(response => {
                         console.log(`Installment ${i + 1} successfully created: `, response.data);
                     })

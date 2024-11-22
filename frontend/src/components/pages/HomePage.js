@@ -15,6 +15,7 @@ const Body = styled.div`
 `
 
 const HomePage = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [balance, setBalance] = useState(0);
     const [positive, setPositive] = useState(0);
     const [negative, setNegative] = useState(0);
@@ -29,7 +30,7 @@ const HomePage = () => {
     }, []);
 
     const fetchBalance = () => {
-        axios.get('http://192.168.1.246:3000/api/cash-register')
+        axios.get(`${BASE_URL}/api/cash-register`)
         .then(response => setBalance(response.data[0].balance))
         .catch(error => console.error('Error: ', error));
     }

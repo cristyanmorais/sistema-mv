@@ -16,6 +16,7 @@ const Body = styled.div`
     `;
 
 const Installment = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const location = useLocation();
     const installmentId = location.state?.id;
     const [amount, setAmount] = useState(0);
@@ -24,7 +25,7 @@ const Installment = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://192.168.1.246:3000/api/installments/${installmentId}`)
+        axios.get(`${BASE_URL}/api/installments/${installmentId}`)
         .then(response => {
             setTransaction(response.data);
             console.log(response.data);
@@ -34,7 +35,7 @@ const Installment = () => {
     },[]);
 
     const fetchAmount = (id, type) => {
-        axios.get(`http://192.168.1.246:3000/api/installments/amount/a?transaction_type=${type}&transaction_id=${id}`)
+        axios.get(`${BASE_URL}/api/installments/amount/a?transaction_type=${type}&transaction_id=${id}`)
         .then(response => {
             setAmount(response.data.amount);
         })
@@ -42,7 +43,7 @@ const Installment = () => {
     };
 
     const sendCashRegisterData = (cashRegisterData) => {
-        return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData)
+        return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData)
         .then(response => {
             console.log("sendCashRegisterData: ", cashRegisterData)
         })
@@ -60,7 +61,7 @@ const Installment = () => {
             paid: true
         }
 
-        axios.put(`http://192.168.1.246:3000/api/installments/${installmentId}`, InstallmentData)
+        axios.put(`${BASE_URL}/api/installments/${installmentId}`, InstallmentData)
             .then(response => {
                 console.log('Installment updated successfully:', response.data);
 

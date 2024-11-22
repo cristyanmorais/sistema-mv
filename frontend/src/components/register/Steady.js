@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Body } from "../Teste";
 import axios from "axios";
 
+const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
 export const Clients = () => {
     const [name, setName] = useState('');
     const [filledFields, setFilledFields] = useState(false);
@@ -19,7 +21,7 @@ export const Clients = () => {
             name
         }
 
-        axios.post('http://192.168.1.246:3000/api/clients', data)
+    axios.post(`${BASE_URL}/api/clients`, data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {
@@ -75,7 +77,7 @@ export const Companies = () => {
             fantasy_name: fantasyName
         }
 
-        axios.post('http://192.168.1.246:3000/api/companies', data)
+        axios.post(`${BASE_URL}/api/companies`, data)
         .catch(error => {
             console.error("Error while creating Company: ", error);
         }).then(response => {
@@ -139,7 +141,7 @@ export const Employees = () => {
             cpf
         }
 
-        axios.post('http://192.168.1.246:3000/api/employees', data)
+        axios.post(`${BASE_URL}/api/employees`, data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {
@@ -188,7 +190,7 @@ export const Works = () => {
             address
         }
 
-        axios.post('http://192.168.1.246:3000/api/works', data)
+        axios.post(`${BASE_URL}/api/works`, data)
         .catch(error => {
             console.error("Error while creating Client: ", error);
         }).then(response => {

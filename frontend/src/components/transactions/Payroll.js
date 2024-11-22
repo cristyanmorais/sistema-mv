@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Body } from '../Teste';
 
 const Payroll = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [employeeId, setEmployeeId] = useState(0);
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
@@ -15,7 +16,7 @@ const Payroll = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/employees')
+        axios.get(`${BASE_URL}/api/employees`)
         .then(response => setEmployees(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -58,11 +59,11 @@ const Payroll = () => {
         }
 
         const sendPayrollData = (data) => {
-            return axios.post('http://192.168.1.246:3000/api/payroll', data);
+            return axios.post(`${BASE_URL}/api/payroll`, data);
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
+            return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData);
         };
 
         const handleInstallment = (payrollId) => {
@@ -89,7 +90,7 @@ const Payroll = () => {
                 console.log(`Installment ${i + 1} due date: ${newDueDate}`);
         
                 // Envia os dados da parcela para a API
-                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                axios.post(`${BASE_URL}/api/installments`, installmentData)
                     .then(response => {
                         console.log(`Installment ${i + 1} successfully created: `, response.data);
                     })

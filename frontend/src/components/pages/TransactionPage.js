@@ -63,13 +63,14 @@ const Body = styled.div`
     `;
 
 const TransactionPage = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [selectedType, setSelectedType] = useState('');
     const [transactions, setTransactions] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://192.168.1.246:3000/api/${selectedType}`)
+        axios.get(`${BASE_URL}/api/${selectedType}`)
         .then(response => {setTransactions(response.data); console.log(response.data)})
         .catch(error => console.error('Error: ', error));
     }, [selectedType])

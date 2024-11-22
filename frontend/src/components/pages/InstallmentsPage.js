@@ -41,6 +41,8 @@ const Body = styled.div`
     `;
 
 const InstallmentsPage = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
     const [filterTerm, setFilterTerm] = useState({
         transactionType: '',
         paid: ''
@@ -49,7 +51,7 @@ const InstallmentsPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/installments', {
+        axios.get(`${BASE_URL}/api/installments`, {
             params: filterTerm
         })
         .then(response => setInstallments(response.data))

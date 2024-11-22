@@ -15,7 +15,7 @@ const Purchases = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/companies')
+        axios.get(`${BASE_URL}/api/companies`)
         .then(response => setCompanies(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -58,11 +58,11 @@ const Purchases = () => {
             }
             
             const sendPurchasesData = (data) => {
-                return axios.post('http://192.168.1.246:3000/api/purchases', data)
+                return axios.post(`${BASE_URL}/api/purchases`, data)
             };
             
             const sendCashRegisterData = (cashRegisterData) => {
-                return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
+                return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData);
             };
     
             const handleInstallment = (purchaseId) => {
@@ -89,7 +89,7 @@ const Purchases = () => {
                     console.log(`Installment ${i + 1} due date: ${newDueDate}`);
             
                     // Envia os dados da parcela para a API
-                    axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                    axios.post(`${BASE_URL}/api/installments`, installmentData)
                         .then(response => {
                             console.log(`Installment ${i + 1} successfully created: `, response.data);
                         })

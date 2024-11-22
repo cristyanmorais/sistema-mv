@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Body } from '../Teste';
 
 const Taxes = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [taxTypeId, setTaxTypeId] = useState(0);
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');
@@ -15,7 +16,7 @@ const Taxes = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/taxes-type')
+        axios.get(`${BASE_URL}/api/taxes-type`)
         .then(response => setTaxTypes(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -55,11 +56,11 @@ const Taxes = () => {
             }
             
             const sendTaxesData = (data) => {
-                return axios.post('http://192.168.1.246:3000/api/taxes', data);
+                return axios.post(`${BASE_URL}/api/taxes`, data);
             };
             
             const sendCashRegisterData = (cashRegisterData) => {
-                return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
+                return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData);
             };
 
             const handleInstallment = (taxId) => {
@@ -86,7 +87,7 @@ const Taxes = () => {
                     console.log(`Installment ${i + 1} due date: ${newDueDate}`);
             
                     // Envia os dados da parcela para a API
-                    axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                    axios.post(`${BASE_URL}/api/installments`, installmentData)
                         .then(response => {
                             console.log(`Installment ${i + 1} successfully created: `, response.data);
                         })

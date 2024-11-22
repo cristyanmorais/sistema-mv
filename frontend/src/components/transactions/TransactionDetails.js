@@ -16,6 +16,7 @@ const Body = styled.div`
     `;
 
 const TransactionDetails = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const location = useLocation();
     const transactionId = location.state?.id;
     const selectedType = location.state?.type;
@@ -24,7 +25,7 @@ const TransactionDetails = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://192.168.1.246:3000/api/${selectedType}/${transactionId}`)
+        axios.get(`${BASE_URL}/api/${selectedType}/${transactionId}`)
         .then(response => {
             setTransaction(response.data);
             console.log(response.data);
@@ -33,7 +34,7 @@ const TransactionDetails = () => {
     },[]);
 
     const sendCashRegisterData = (cashRegisterData) => {
-        return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData)
+        return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData)
         .then(response => {
             console.log("sendCashRegisterData: ", cashRegisterData)
         })
@@ -47,7 +48,7 @@ const TransactionDetails = () => {
             paid: true
         }
 
-        axios.put(`http://192.168.1.246:3000/api/${selectedType}/${transactionId}/paid`, TransactionData)
+        axios.put(`${BASE_URL}/api/${selectedType}/${transactionId}/paid`, TransactionData)
             .then(response => {
                 console.log('Installment updated successfully:', response.data);
 

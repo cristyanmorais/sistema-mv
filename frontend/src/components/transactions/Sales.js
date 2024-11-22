@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Body } from '../Teste';
 
 const Sales = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     const [workId, setWorkId] = useState(0);
     const [amount, setAmount] = useState(0);
     const [description, setDescription] = useState('');
@@ -17,7 +18,7 @@ const Sales = () => {
     const [workIdInput, setWorkIdInput] = useState('');
 
     useEffect(() => {
-        axios.get('http://192.168.1.246:3000/api/works')
+        axios.get(`${BASE_URL}/api/works`)
         .then(response => setWorks(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
@@ -68,11 +69,11 @@ const Sales = () => {
         }
 
         const sendSalesData = (data) => {
-            return axios.post('http://192.168.1.246:3000/api/sales', data)
+            return axios.post(`${BASE_URL}/api/sales`, data)
         };
         
         const sendCashRegisterData = (cashRegisterData) => {
-            return axios.post('http://192.168.1.246:3000/api/cash-register', cashRegisterData);
+            return axios.post(`${BASE_URL}/api/cash-register`, cashRegisterData);
         };
 
         const handleInstallment = (saleId) => {
@@ -99,7 +100,7 @@ const Sales = () => {
                 console.log(`Installment ${i + 1} due date: ${newDueDate}`);
         
                 // Envia os dados da parcela para a API
-                axios.post('http://192.168.1.246:3000/api/installments', installmentData)
+                axios.post(`${BASE_URL}/api/installments`, installmentData)
                     .then(response => {
                         console.log(`Installment ${i + 1} successfully created: `, response.data);
                     })
