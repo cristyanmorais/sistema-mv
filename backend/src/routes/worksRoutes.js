@@ -5,5 +5,6 @@ const worksController = require('../controllers/worksController');
 router.get('/', worksController.getAllWorks);
 router.get('/:id', worksController.getWorkById);
 router.post('/', worksController.createWork);
+router.put('/:id', worksController.updateWork);
 
 module.exports = router;

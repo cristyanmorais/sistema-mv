@@ -26,9 +26,9 @@ exports.getEmployeeById = async (req, res) => {
 }
 
 exports.createEmployee = async (req, res) => {
-    const { name, cpf } = req.body;
-    const query = 'INSERT INTO employees (name, cpf) VALUES ($1, $2);';
-    const values = [name, cpf];
+    const { name, cpf, phone, email, address_id } = req.body;
+    const query = 'INSERT INTO employees (name, cpf, phone, email, address_id) VALUES ($1, $2, $3, $4, $5);';
+    const values = [name, cpf, phone, email, address_id];
     try {
         result = await db.query(query, values);
 
@@ -46,9 +46,9 @@ exports.createEmployee = async (req, res) => {
 
 exports.updateEmployee = async (req, res) => {
     const id = req.params.id;
-    const { name, cpf } = req.body;
-    const query = 'UPDATE employees SET name = $1, cpf = $2 WHERE id = $3;';
-    const values = [name, cpf, id];
+    const { name, cpf, phone, email, address_id } = req.body;
+    const query = 'UPDATE employees SET name = $1, cpf = $2, phone = $3, email = $4, address_id = $5 WHERE id = $6;';
+    const values = [name, cpf, phone, email, address_id, id];
     try {
         result = await db.query(query, values);
 

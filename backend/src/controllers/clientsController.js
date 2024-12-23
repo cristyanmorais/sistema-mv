@@ -27,9 +27,9 @@ exports.getClientById = async (req, res) => {
 
 // Adicionar Telefone e Email caso necesário
 exports.createClient = async (req, res) => {
-    const { name } = req.body;
-    const query = 'INSERT INTO clients (name) VALUES ($1);';
-    const values = [name];
+    const { name, phone, email, address_id } = req.body;
+    const query = 'INSERT INTO clients (name, phone, email, address_id) VALUES ($1, $2, $3, $4);';
+    const values = [name, phone, email, address_id];
     try {
         result = await db.query(query, values);
 
@@ -47,9 +47,9 @@ exports.createClient = async (req, res) => {
 
 exports.updateClient = async (req, res) => {
     const id = req.params.id;
-    const { name } = req.body;
-    const query = 'UPDATE clients SET name = $1 WHERE id = $2;';
-    const values = [name, id];
+    const { name, phone, email, address_id } = req.body;
+    const query = 'UPDATE clients SET name = $1, phone = $2, email = $3, address_id = $4 WHERE id = $5;';
+    const values = [name, phone, email, address_id, id];
     try {
         result = await db.query(query, values);
 

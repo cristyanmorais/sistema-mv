@@ -26,9 +26,9 @@ exports.getCompanyById = async (req, res) => {
 }
 
 exports.createCompany = async (req, res) => {
-    const { cnpj, real_name, fantasy_name } = req.body;
-    const query = 'INSERT INTO companies (cnpj, real_name, fantasy_name) VALUES ($1, $2, $3);';
-    const values = [cnpj, real_name, fantasy_name];
+    const { cnpj, real_name, fantasy_name, phone, email, address_id } = req.body;
+    const query = 'INSERT INTO companies (cnpj, real_name, fantasy_name, phone, email, address_id) VALUES ($1, $2, $3, $4, $5, $6);';
+    const values = [cnpj, real_name, fantasy_name, phone, email, address_id];
     try {
         result = await db.query(query, values);
 
@@ -46,9 +46,9 @@ exports.createCompany = async (req, res) => {
 
 exports.updateCompany = async (req, res) => {
     const id = req.params.id;
-    const { cnpj, real_name, fantasy_name } = req.body;
-    const query = 'UPDATE companies SET cnpj = $1, real_name = $2, fantasy_name = $3 WHERE id = $4;';
-    const values = [cnpj, real_name, fantasy_name, id];
+    const { cnpj, real_name, fantasy_name, phone, email, address_id } = req.body;
+    const query = 'UPDATE companies SET cnpj = $1, real_name = $2, fantasy_name = $3, phone = $4, email = $5, address_id = $6 WHERE id = $7;';
+    const values = [cnpj, real_name, fantasy_name, phone, email, address_id, id];
     try {
         result = await db.query(query, values);
 
