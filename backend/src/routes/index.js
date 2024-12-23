@@ -41,4 +41,13 @@ router.use('/installments', installmentsRoutes);
 const cashRegisterRoutes = require('./cashRegisterRoutes');
 router.use('/cash-register', cashRegisterRoutes);
 
+const addressesRoutes = require('./addressesRoutes');
+router.use('/addresses', addressesRoutes);
+
+const citiesRoutes = require('./citiesRoutes');
+router.use('/cities', citiesRoutes);
+
+const districtsRoutes = require('./districtsRoutes');
+router.use('/districts', districtsRoutes);
+
 module.exports = router;
