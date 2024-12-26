@@ -1,104 +1,110 @@
-header {
-    height: 75px;
-    /* background-color: #212139; */
-    
+.container {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    /* margin-bottom: 50px; */
-}
-
-header img {
-    height: 75px;
-    /* margin-left: 15px; */
-}
-
-.menu {
-    background-color: #99bedb;
-    width: 200px;
+  }
+  
+  /* Menu principal */
+  .menu {
+    background-color: #E1EBF2;
+    width: 250px;
     height: 100%;
-
     display: flex;
     flex-direction: column;
-
-    /* padding-top: 25px; */
-    z-index: 1000;
-
     position: fixed;
     top: 0;
     left: 0;
-}
-
-.menu-title {
-    color: #000000;
+    padding-top: 25px;
+    z-index: 1000;
+  }
+  
+  .menu-title {
+    color: #000;
     text-align: center;
-    margin: 25px 0;
+    margin: 25px 0 100px 0;
     font-size: 35px;
     font-weight: bold;
-}
-
-.menu .div-link {
+  }
+  
+  /* Links do menu */
+  .menu .div-link {
     width: 100%;
     text-align: center;
-    margin-top: 5px;
-}
-
-.menu .link {
+  }
+  
+  .menu .link {
     text-decoration: none;
-    color: #000000;
+    color: #000;
     font-size: 18px;
     display: block;
-    transition: all 1s ease;
-    width: 85%;
-    margin: auto;
-    border-radius: 25px;
+    width: 100%; 
+    margin: 0; 
     padding: 10px 0;
+    transition: all 1s ease;
+    font-weight: bold;
+  }
+  
+  .menu .link:hover {
+    background-color: #f4faff;
+  }
+  
+  /* Flyout menu */
+.flyout-container {
+    position: relative;
+}
+  
+.flyout-container .link:not('fix') {
+    cursor: pointer;
 }
 
-.menu .link:hover {
-    background-color: #ffffff;
+.fix {
+    cursor: default;
 }
-
+  
+.flyout-menu {
+    display: none; 
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background-color: #E1EBF2;
+    width: 200px;
+    z-index: 1;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateX(10px);
+    will-change: opacity, transform; /* Important for performance */
+    transition: all 0.3s ease; /* Adjust transition duration as needed */
+}
+  
+.flyout-menu .link {
+    width: 100%;
+    text-align: center; 
+    padding: 10px 20px;
+    background-color: #E1EBF2; 
+    transition: background-color 1s ease; /* Adjust transition duration as needed */
+}
+  
+  /* Hover nos links do submenu */
+.flyout-menu .link:hover {
+    background-color: #f4faff; 
+}
+  
+.flyout-container:hover .flyout-menu {
+    display: flex; 
+    opacity: 1;
+    transform: translateX(0);
+}
+  
+  /* Animação de hover */
+.flyout-container:hover .link:hover {
+    background-color: #f4faff;
+}
+  
 .linha {
+    background-color: #fff;
+    height: 3px;
     width: 80%;
+    margin: 10px auto;
 }
 
-/* Botão de droplist */
-.menu .fixed {
-    background: none;
-    border: none;
-    font-size: 22px;
-    /* color: #fff; */
-    text-align: center;
-    /* cursor: pointer; */
-    width: 85%;
-    margin: auto;
-    border-radius: 25px;
-    padding: 10px 0;
-    transition: all 1s ease;
-  }
-  
-  /* Container da droplist */
-  .menu .droplist {
-    background-color: #99bedb;
-    margin-top: 5px;
-    width: 85%;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 15px;
-    overflow: hidden;
-    animation: all 0.5s ease;
-  }
-  
-  /* Itens da droplist */
-  .menu .droplist-item {
-    font-size: 18px;
-    padding: 8px 0;
-    display: block;
-    text-align: center;
-    transition: all 1s ease;
-  }
-  
-  .menu .droplist-item:hover {
-    background-color: #ffffff;
-  }
+.active {
+    background-color: #f4faff;
+}

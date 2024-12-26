@@ -1,59 +1,47 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import logo from '../assets/logo.png';
-import './layout.css';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-
-const Div = styled.div`
-  display: flex;
-`
+import './layout.css'
 
 const Header = () => {
-  return(
+  return (
     <header>
       <p>header</p>
     </header>
   );
-}
+};
 
 const Menu = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   return (
-    <div className='menu'>
+    <div className="menu">
       <div className="menu-title">MENU</div>
-        <div className='div-link'>
-            <NavLink to="/" className="link">Dashboard</NavLink>
-        </div>
-        <hr className='linha' />
-        <div className='div-link'>
-            <NavLink to="/transaction" className="link">Transações</NavLink>
-        </div>
-        <hr className='linha' />
-        <div className='div-link'>
-            <NavLink to="/installments" className="link">Parcelas</NavLink>
-        </div>
-        <hr className='linha' />
-        <div className='div-link'>
-            <NavLink to="/register" className="link">Cadastro</NavLink>
-        </div>
-        <hr className='linha' />
-        <div className="div-link">
-        <p className="fixed">
-          Listagem
-        </p>
-          <div className="droplist">
-          <NavLink to="/cities" className="link droplist-item">Cidades</NavLink>
-            <NavLink to="/clients" className="link droplist-item">Clientes</NavLink>
-            <NavLink to="/companies" className="link droplist-item">Empresas</NavLink>
-            <NavLink to="/employees" className="link droplist-item">Funcionários</NavLink>
-            <NavLink to="/works" className="link droplist-item">Obras</NavLink>
-          </div>
+
+      <div className="div-link">
+        <NavLink to="/" className="link" activeClassName="active">Dashboard</NavLink>
       </div>
+      <div className='linha' />
+      <div className="div-link">
+        <NavLink to="/transaction" className="link" activeClassName="active">Transações</NavLink>
+      </div>
+      <div className='linha' />
+      <div className="div-link">
+        <NavLink to="/installments" className="link" activeClassName="active">Parcelas</NavLink>
+      </div>
+      <div className='linha' />
+      <div className="div-link">
+        <NavLink to="/register" className="link" activeClassName="active">Cadastro</NavLink>
+      </div>
+      <div className='linha' />
+      <div className="div-link flyout-container">
+        <p className="link fix">Listagem</p>
+        <div className="flyout-menu">
+          <NavLink to="/cities" className="link">Cidades</NavLink>
+          <NavLink to="/clients" className="link">Clientes</NavLink>
+          <NavLink to="/companies" className="link">Empresas</NavLink>
+          <NavLink to="/employees" className="link">Funcionários</NavLink>
+          <NavLink to="/works" className="link">Obras</NavLink>
+        </div>
+      </div>
+
     </div>
   );
 };
@@ -62,10 +50,10 @@ const Layout = ({ children }) => {
   return (
     <div>
       <Header />
-      <Div className="container">
+      <div className="container">
         <Menu />
         {children}
-      </Div>
+      </div>
     </div>
   );
 };
