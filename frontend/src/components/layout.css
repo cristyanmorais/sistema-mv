@@ -1,5 +1,20 @@
+header {
+    height: 75px;
+    /* background-color: #212139; */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* margin-bottom: 50px; */
+}
+
+header img {
+    height: 75px;
+    /* margin-left: 15px; */
+}
+
 .menu {
-    background-color: #212139;
+    background-color: #99bedb;
     width: 200px;
     height: 100%;
 
@@ -15,7 +30,7 @@
 }
 
 .menu-title {
-    color: #fff;
+    color: #000000;
     text-align: center;
     margin: 25px 0;
     font-size: 35px;
@@ -30,8 +45,8 @@
 
 .menu .link {
     text-decoration: none;
-    color: #fff;
-    font-size: 22px;
+    color: #000000;
+    font-size: 18px;
     display: block;
     transition: all 1s ease;
     width: 85%;
@@ -41,24 +56,49 @@
 }
 
 .menu .link:hover {
-    background-color: #3e3e6b;
+    background-color: #ffffff;
 }
 
 .linha {
     width: 80%;
 }
 
-header {
-    height: 100px;
-    background-color: #212139;
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* margin-bottom: 50px; */
-}
-
-header img {
-    height: 75px;
-    /* margin-left: 15px; */
-}
+/* Botão de droplist */
+.menu .fixed {
+    background: none;
+    border: none;
+    font-size: 22px;
+    /* color: #fff; */
+    text-align: center;
+    /* cursor: pointer; */
+    width: 85%;
+    margin: auto;
+    border-radius: 25px;
+    padding: 10px 0;
+    transition: all 1s ease;
+  }
+  
+  /* Container da droplist */
+  .menu .droplist {
+    background-color: #99bedb;
+    margin-top: 5px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+    overflow: hidden;
+    animation: all 0.5s ease;
+  }
+  
+  /* Itens da droplist */
+  .menu .droplist-item {
+    font-size: 18px;
+    padding: 8px 0;
+    display: block;
+    text-align: center;
+    transition: all 1s ease;
+  }
+  
+  .menu .droplist-item:hover {
+    background-color: #ffffff;
+  }
