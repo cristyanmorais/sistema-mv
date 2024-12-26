@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
 import Layout from '../Layout'
-import { Clients, Companies, Employees, Works } from "../register/Steady";
+// import { Cities, Clients, Companies, Employees, Works } from "../register/Steady";
 
 const Body = styled.div`
         // background-color: lightblue;
@@ -52,18 +52,20 @@ const Register = () => {
     // }, [selectedType])
 
     const renderComponent = () => {
-        switch (selectedType) {
-            case "clients":
-                return <Clients />;
-            case "companies":
-                return <Companies />;
-            case "employees":
-                return <Employees />;
-            case "works":
-                return <Works />;
-            default:
-                return null;
-        }
+        // switch (selectedType) {
+        //     case "clients":
+        //         return <Clients />;
+        //     case "companies":
+        //         return <Companies />;
+        //     case "employees":
+        //         return <Employees />;
+        //     case "works":
+        //         return <Works />;
+        //     case "cities":
+        //         return <Cities />;
+        //     default:
+        //         return null;
+        // }
     }
 
     return (
@@ -77,6 +79,7 @@ const Register = () => {
                         <option value="companies">Empresas</option>
                         <option value="employees">Funcionários</option>
                         <option value="works">Obras</option>
+                        <option value="cities">Cidades</option>
                     </select>
                 </TransactionType>
 

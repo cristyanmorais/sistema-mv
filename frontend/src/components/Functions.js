@@ -20,3 +20,15 @@ export const getTransactionTypeLabel = (type) => {
             return 'Outro';
     }
 }
+
+export const handlePhoneChange = (input, setPhone) => {
+    const numericPhone = input.replace(/\D/g, '');
+    if (numericPhone.length <= 14) {
+        setPhone(numericPhone);
+    }
+};
+
+export const textNumber = (input, set) => {
+    const numericText = input.replace(/\D/g, '');
+    set(numericText);
+};

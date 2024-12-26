@@ -8,6 +8,8 @@ import Installments from './components/transactions/Installment';
 import NewTransaction from './components/transactions/NewTransaction';
 import Register from './components/pages/RegisterPage'
 import TransactionDetails from './components/transactions/TransactionDetails';
+import ClientList from './components/pages/list/ClientList';
+import ClientDetails from './components/pages/list/details/ClientDetails';
 
 const Router = () => {
     return (
@@ -20,6 +22,9 @@ const Router = () => {
                 <Route path='/installments' Component={InstallmentsPage} />
                 <Route path='/installment-details' Component={Installments} />
                 <Route path='/register' Component={Register} />
+
+                <Route path='/clients' Component={ClientList} />
+                <Route path="/edit-client/:id" element={<ClientDetails isEditing={true} />} />
             </Routes>
         </BrowserRouter>
     );

@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllClients = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM clients');
+        const result = await db.query('SELECT * FROM clients WHERE is_active = true');
         res.json(result.rows);
 
     } catch (err) {
@@ -64,3 +64,21 @@ exports.updateClient = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.deleteClient = async (req, res) => {
+    const id = req.params.id;
+    const query = 'UPDATE clients SET is_active = false WHERE id = $1;';
+    
+    try {
+        const result = await db.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Client not found.' });
+        }
+
+        res.status(200).json({ message: 'Client deactivated successfully.' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};
