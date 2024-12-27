@@ -63,3 +63,21 @@ exports.updateEmployee = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.deleteEmployee = async (req, res) => {
+    const id = req.params.id;
+    const query = 'UPDATE employees SET is_active = false WHERE id = $1;';
+    
+    try {
+        const result = await db.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Employee not found.' });
+        }
+
+        res.status(200).json({ message: 'Employee deactivated successfully.' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};

@@ -1,5 +1,16 @@
-export const Cities = () => {
+import React, { useEffect, useState } from "react";
+import { Body } from "../../../Teste";
+import axios from "axios";
+import { useNavigate, useParams } from 'react-router-dom';
+import { handlePhoneChange, textNumber } from "../../../Functions";
+import Layout from "../../../Layout";
+import ConfirmDialog from "../../../visual-components/ConfirmDialog";
+
+const CityDetails = () => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
     const [name, setName] = useState('');
+
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
@@ -40,3 +51,5 @@ export const Cities = () => {
         </Body>
     );
 }
+
+export default CityDetails;

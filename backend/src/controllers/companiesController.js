@@ -63,3 +63,21 @@ exports.updateCompany = async (req, res) => {
         res.status(500).send(err.message);
     }
 }
+
+exports.deleteCompany = async (req, res) => {
+    const id = req.params.id;
+    const query = 'UPDATE companies SET is_active = false WHERE id = $1;';
+    
+    try {
+        const result = await db.query(query, [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Company not found.' });
+        }
+
+        res.status(200).json({ message: 'Company deactivated successfully.' });
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+};

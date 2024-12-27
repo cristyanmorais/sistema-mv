@@ -37,20 +37,20 @@ const Body = styled.div`
         }
     `;
 
-const ClientList = () => {
+const CompanyList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [clients, setClients] = useState([]);
+    const [companies, setCompanies] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/clients`)
-        .then(response => setClients(response.data))
+        axios.get(`${BASE_URL}/api/companies`)
+        .then(response => setCompanies(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-client/${id}`);
+        navigate(`/edit-company/${id}`);
     }
 
     return (
@@ -61,18 +61,20 @@ const ClientList = () => {
                         <thead>
                             <tr className="title-row">
                                 <th>ID</th>
-                                <th>NOME</th>
+                                <th>NOME FANTASIA</th>
                                 <th>TELEFONE</th>
                                 <th>EMAIL</th>
+                                <th>CNPJ</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map((client, index) => (
-                                <tr key={client.id} onClick={() => handleRowClick(client.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{client.id}</td>
-                                    <td>{client.name}</td>
-                                    <td>{client.phone}</td>
-                                    <td>{client.email}</td>
+                            {companies.map((company, index) => (
+                                <tr key={company.id} onClick={() => handleRowClick(company.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{company.id}</td>
+                                    <td>{company.fantasy_name}</td>
+                                    <td>{company.phone}</td>
+                                    <td>{company.email}</td>
+                                    <td>{company.cnpj}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -83,4 +85,4 @@ const ClientList = () => {
     );
 }
 
-export default ClientList;
+export default CompanyList;

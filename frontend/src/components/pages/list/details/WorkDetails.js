@@ -1,8 +1,23 @@
-export const Works = () => {
+import React, { useEffect, useState } from "react";
+import { Body } from "../../../Teste";
+import axios from "axios";
+import { useNavigate, useParams } from 'react-router-dom';
+import { textNumber } from "../../../Functions";
+import Layout from "../../../Layout";
+import ConfirmDialog from "../../../visual-components/ConfirmDialog";
+
+
+export const WorkDetails = ({ isEditing = false }) => {
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const navigate = useNavigate();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    
+    const { id } = useParams(); // Captura o ID do obra
     const [name, setName] = useState('');
     const [area, setArea] = useState(0);
     const [floors, setFloors] = useState(0);
     const [clientId, setClientId] = useState(0);
+    const [addressId, setAddressId] = useState(0);
 
     const [clients, setClients] = useState([]);
     const [clientIdInput, setClientIdInput] = useState('');
@@ -18,24 +33,30 @@ export const Works = () => {
     const [filledFields, setFilledFields] = useState(false);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/clients`)
-        .then(response => setClients(response.data))
-        .catch(error => console.error('Error: ', error));
-
         axios.get(`${BASE_URL}/api/cities`)
         .then(response => setCities(response.data))
+        .catch(error => console.error('Error: ', error));
+
+        axios.get(`${BASE_URL}/api/clients`)
+        .then(response => setClients(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     useEffect(() => {
-        if (name !== '' && area !== 0 && floors !== 0 && clientId !== 0 && addressLine1 !== '' && zipCode !== '' && cityId !== 0 && number !== '') {
+        if (isEditing && id) {
+            loadWorkForEdit(id); // Carrega os dados do obra para edição
+        }
+    }, [isEditing, id]);
+
+    useEffect(() => {
+        if (name !== '' && area !== 0 && floors !== 0 && clientId !== 0 && addressLine1 !== '' && zipCode.length === 8 && cityId !== 0 && number !== '') {
             setFilledFields(true);
         } else {
             setFilledFields(false);
         }
     }, [name, area, floors, clientId, addressLine1, zipCode, cityId, number])
 
-    const handleConfirm = (addressId) =>  {
+    const handleConfirm = async (addressId) =>  {
         const data = {
             name,
             area: Number(area),
@@ -44,29 +65,83 @@ export const Works = () => {
             address_id: addressId
         }
 
-        axios.post(`${BASE_URL}/api/works`, data)
-        .catch(error => {
-            console.error("Error while creating Client: ", error);
-        }).then(response => {
-            clearFields();
-        })
-    }
-
-    const handleAddress = async () =>  {
         try {
-            const responseAddress = await axios.post(`${BASE_URL}/api/addresses`, {
-                address_line_1: addressLine1,
-                address_line_2: addressLine2,
-                zip_code: zipCode,
-                city_id: cityId,
-                number
-            })
-
-            handleConfirm(responseAddress.data.id);
-        } catch (e) {
-            console.error('Erro ao cadastrar endereço:', e);
+            if (isEditing && id) {
+                // Atualizar obra
+                await axios.put(`${BASE_URL}/api/works/${id}`, data);
+                console.log('Obra atualizado com sucesso!');
+            } else {
+                // Criar novo obra
+                await axios.post(`${BASE_URL}/api/works`, data);
+                console.log('Obra cadastrado com sucesso!');
+            }
+            clearFields();
+            navigate('/works');
+        } catch (error) {
+            console.error('Erro ao salvar obra:', error);
         }
     }
+
+    const handleAddress = async () => {
+        try {
+            if (!cityId || !zipCode || !addressLine1 || !number) {
+                throw new Error("Preencha todos os campos do endereço!");
+            }
+    
+            if (isEditing && id) {
+                console.log("if de edit")
+                // Atualizar endereço existente
+                const response = await axios.put(`${BASE_URL}/api/addresses/${addressId}`, {
+                    address_line_1: addressLine1,
+                    address_line_2: addressLine2,
+                    zip_code: zipCode,
+                    city_id: cityId,
+                    number,
+                });
+            } else {
+                console.log("else de post")
+                // Criar novo endereço
+                const response = await axios.post(`${BASE_URL}/api/addresses`, {
+                    address_line_1: addressLine1,
+                    address_line_2: addressLine2,
+                    zip_code: zipCode,
+                    city_id: cityId,
+                    number,
+                });
+                addressId = response.data.id;
+            }
+    
+            handleConfirm(addressId);
+        } catch (error) {
+            console.error("Erro ao salvar endereço:", error);
+        }
+    };
+
+    const loadWorkForEdit = async (workId) => {
+        try {
+            const workResponse = await axios.get(`${BASE_URL}/api/works/${workId}`);
+            const work = workResponse.data;
+
+            setName(work.name);
+            setArea(work.area);
+            setFloors(work.floors);
+            setClientId(work.client_id);
+            setClientIdInput(work.client_id);
+            setAddressId(work.address_id);
+
+            const addressResponse = await axios.get(`${BASE_URL}/api/addresses/${work.address_id}`);
+            const address = addressResponse.data;
+
+            setAddressLine1(address.address_line_1);
+            setAddressLine2(address.address_line_2);
+            setZipCode(address.zip_code);
+            setCityId(address.city_id);
+            setNumber(address.number);
+            setCityIdInput(address.city_id.toString());
+        } catch (error) {
+            console.error('Erro ao carregar obra para edição:', error);
+        }
+    };
 
     const handleClientChange = (e) => {
         const selectedClientId = parseInt(e.target.value, 10); // Converte para número
@@ -92,6 +167,23 @@ export const Works = () => {
         setCityIdInput(inputId.toString());
     };
 
+    const handleDelete = async () => {
+        if (isEditing && id) {
+            try {
+                await axios.put(`${BASE_URL}/api/works/${id}/delete`); // Atualiza para mudar `is_active` para false
+                alert("Obra deletado com sucesso!");
+                navigate('/works'); // Redireciona para a lista de obras
+            } catch (error) {
+                console.error("Erro ao deletar o obra:", error);
+                alert("Ocorreu um erro ao tentar deletar o obra.");
+            } finally {
+                setIsDialogOpen(false); // Fecha o popup
+            }
+        } else {
+            alert("Não é possível deletar. O obra não está em modo de edição ou ID inválido.");
+        }
+    };
+
     const clearFields = () => {
         setName('');
         setArea(0);
@@ -105,10 +197,12 @@ export const Works = () => {
     }
 
     return (
+        <Layout>
         <Body>
+            {/* <h1>{isEditing ? 'Editar Obra' : 'Cadastrar Obra'}</h1> */}
             <div className='field'>
                 <label>Nome:</label>
-                <input type='text' value={name} onChange={e => setName(e.target.value)}/>
+                <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
             </div>
 
             <div className='field'>
@@ -138,37 +232,39 @@ export const Works = () => {
                     </select>
             </div>
 
+            {/* Endereço */}
             <div>
                 <div className='field'>
                     <label>Rua:</label>
-                    <input type='text' value={addressLine1} onChange={e => setAddressLine1(e.target.value)}/>
+                    <input type='text' value={addressLine1} onChange={(e) => setAddressLine1(e.target.value)} />
                 </div>
 
                 <div className='field'>
                     <label>Complemento:</label>
-                    <input type='text' value={addressLine2} onChange={e => setAddressLine2(e.target.value)}/>
+                    <input type='text' value={addressLine2} onChange={(e) => setAddressLine2(e.target.value)} />
                 </div>
 
                 <div className='field'>
                     <label>Número:</label>
-                    <input type='text' value={number} onChange={e => textNumber(e.target.value, setNumber)}/>
+                    <input type='text' value={number} onChange={(e) => textNumber(e.target.value, setNumber, 10)} />
                 </div>
 
                 <div className='field'>
                     <label>CEP:</label>
-                    <input type='text' value={zipCode} onChange={e => setZipCode(e.target.value)}/>
+                    <input type='text' value={zipCode} onChange={(e) => textNumber(e.target.value, setZipCode, 8)} />
                 </div>
 
                 <div className='select-id'>
                     <input
-                        // type='number'
                         placeholder='ID'
                         value={cityIdInput}
                         onChange={handleCityIdInputChange}
                     />
                     <select value={cityId} onChange={handleCityChange}>
-                        <option value={0} disabled>Selecione uma Cidade</option>
-                        {cities.map(city => (
+                        <option value={0} disabled>
+                            Selecione uma Cidade
+                        </option>
+                        {cities.map((city) => (
                             <option key={city.id} value={city.id}>
                                 {city.name}
                             </option>
@@ -178,8 +274,31 @@ export const Works = () => {
             </div>
 
             <div className='field'>
-                <button onClick={handleAddress} disabled={!filledFields}>Confirmar</button>
+                <button onClick={handleAddress} disabled={!filledFields}>
+                    {isEditing ? 'Salvar Alterações' : 'Confirmar'}
+                </button>
             </div>
+
+            <div>
+            {isEditing && (
+                <div className="field">
+                    <button onClick={() => setIsDialogOpen(true)}>
+                        Deletar
+                    </button>
+                </div>
+            )}
+
+            {/* Popup de confirmação */}
+            <ConfirmDialog
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                onConfirm={handleDelete}
+                message="Tem certeza de que deseja deletar este obra?"
+            />
+        </div>
         </Body>
+        </Layout>
     );
 }
+
+export default WorkDetails;

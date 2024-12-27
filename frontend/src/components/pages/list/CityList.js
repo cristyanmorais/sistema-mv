@@ -37,20 +37,20 @@ const Body = styled.div`
         }
     `;
 
-const ClientList = () => {
+const CityList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [clients, setClients] = useState([]);
+    const [cities, setCities] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/clients`)
-        .then(response => setClients(response.data))
+        axios.get(`${BASE_URL}/api/cities`)
+        .then(response => setCities(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-client/${id}`);
+        navigate(`/edit-city/${id}`);
     }
 
     return (
@@ -62,17 +62,13 @@ const ClientList = () => {
                             <tr className="title-row">
                                 <th>ID</th>
                                 <th>NOME</th>
-                                <th>TELEFONE</th>
-                                <th>EMAIL</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map((client, index) => (
-                                <tr key={client.id} onClick={() => handleRowClick(client.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{client.id}</td>
-                                    <td>{client.name}</td>
-                                    <td>{client.phone}</td>
-                                    <td>{client.email}</td>
+                            {cities.map((city, index) => (
+                                <tr key={city.id} onClick={() => handleRowClick(city.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{city.id}</td>
+                                    <td>{city.name}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -83,4 +79,4 @@ const ClientList = () => {
     );
 }
 
-export default ClientList;
+export default CityList;

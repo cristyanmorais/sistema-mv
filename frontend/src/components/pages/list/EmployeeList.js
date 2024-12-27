@@ -37,20 +37,20 @@ const Body = styled.div`
         }
     `;
 
-const ClientList = () => {
+const EmployeeList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [clients, setClients] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/clients`)
-        .then(response => setClients(response.data))
+        axios.get(`${BASE_URL}/api/employees`)
+        .then(response => setEmployees(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-client/${id}`);
+        navigate(`/edit-employee/${id}`);
     }
 
     return (
@@ -64,15 +64,17 @@ const ClientList = () => {
                                 <th>NOME</th>
                                 <th>TELEFONE</th>
                                 <th>EMAIL</th>
+                                <th>CPF</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map((client, index) => (
-                                <tr key={client.id} onClick={() => handleRowClick(client.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{client.id}</td>
-                                    <td>{client.name}</td>
-                                    <td>{client.phone}</td>
-                                    <td>{client.email}</td>
+                            {employees.map((employee, index) => (
+                                <tr key={employee.id} onClick={() => handleRowClick(employee.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{employee.id}</td>
+                                    <td>{employee.name}</td>
+                                    <td>{employee.phone}</td>
+                                    <td>{employee.email}</td>
+                                    <td>{employee.cpf}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -83,4 +85,4 @@ const ClientList = () => {
     );
 }
 
-export default ClientList;
+export default EmployeeList;

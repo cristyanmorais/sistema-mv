@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Body } from "../../../Teste";
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
-import { handlePhoneChange, textNumber } from "../../../Functions";
+import { textNumber } from "../../../Functions";
 import Layout from "../../../Layout";
 import ConfirmDialog from "../../../visual-components/ConfirmDialog";
 
@@ -42,7 +42,7 @@ export const ClientDetails = ({ isEditing = false }) => {
     }, [isEditing, id]);
 
     useEffect(() => {
-        if (name !== '' && phone !== '' && email !== '' && addressLine1 !== '' && zipCode !== '' && cityId !== 0 && number !== '') {
+        if (name !== '' && phone.length >= 10 && email !== '' && addressLine1 !== '' && zipCode.length === 8 && cityId !== 0 && number !== '') {
             setFilledFields(true);
         } else {
             setFilledFields(false);
@@ -184,7 +184,7 @@ export const ClientDetails = ({ isEditing = false }) => {
 
             <div className='field'>
                 <label>Telefone:</label>
-                <input type='text' value={phone} onChange={(e) => handlePhoneChange(e.target.value, setPhone)} />
+                <input type='text' value={phone} onChange={(e) => textNumber(e.target.value, setPhone, 11)} />
             </div>
 
             <div className='field'>
@@ -206,12 +206,12 @@ export const ClientDetails = ({ isEditing = false }) => {
 
                 <div className='field'>
                     <label>Número:</label>
-                    <input type='text' value={number} onChange={(e) => textNumber(e.target.value, setNumber)} />
+                    <input type='text' value={number} onChange={(e) => textNumber(e.target.value, setNumber, 10)} />
                 </div>
 
                 <div className='field'>
                     <label>CEP:</label>
-                    <input type='text' value={zipCode} onChange={(e) => setZipCode(e.target.value)} />
+                    <input type='text' value={zipCode} onChange={(e) => textNumber(e.target.value, setZipCode, 8)} />
                 </div>
 
                 <div className='select-id'>

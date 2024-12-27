@@ -23,12 +23,14 @@ export const getTransactionTypeLabel = (type) => {
 
 export const handlePhoneChange = (input, setPhone) => {
     const numericPhone = input.replace(/\D/g, '');
-    if (numericPhone.length <= 14) {
+    if (numericPhone.length <= 11) {
         setPhone(numericPhone);
     }
 };
 
-export const textNumber = (input, set) => {
+export const textNumber = (input, set, size) => {
     const numericText = input.replace(/\D/g, '');
-    set(numericText);
+    if (numericText.length <= size) {
+        set(numericText);
+    }
 };

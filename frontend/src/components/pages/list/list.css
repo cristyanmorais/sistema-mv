@@ -23,30 +23,30 @@ th {
     background-color: lightgrey;
 }
 
-.clients-table {
+.table {
     width: 1000px;
 }
 
-.clients-table thead {
+.table thead {
     font-size: 25px;
     background-color: #212139;
     color: #fff;
 }
 
-.clients-table tbody {
+.table tbody {
     font-size: 20px;
     text-align: center;
 }
 
-.clients-table td {
+.table td {
     height: 30px;
 }
 
-.clients-table tr {
+.table tr {
     transition: all ease 1s;
 }
 
-.clients-table tr:not(.title-row):hover {
+.table tr:not(.title-row):hover {
     background-color: #9cbfe7;
 }
 
