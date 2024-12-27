@@ -33,14 +33,19 @@ const Router = () => {
 
                 <Route path='/clients' Component={ClientList} />
                 <Route path="/edit-client/:id" element={<ClientDetails isEditing={true} />} />
+                <Route path="/create-client" element={<ClientDetails isEditing={false} />} />
                 <Route path='/cities' Component={CityList} />
                 <Route path="/edit-city/:id" element={<CityDetails isEditing={true} />} />
+                <Route path="/create-city" element={<CityDetails isEditing={false} />} />
                 <Route path='/companies' Component={CompanyList} />
                 <Route path="/edit-company/:id" element={<CompanyDetails isEditing={true} />} />
+                <Route path="/create-company" element={<CompanyDetails isEditing={false} />} />
                 <Route path='/employees' Component={EmployeeList} />
                 <Route path="/edit-employee/:id" element={<EmployeeDetails isEditing={true} />} />
+                <Route path="/create-employee" element={<EmployeeDetails isEditing={false} />} />
                 <Route path='/works' Component={WorkList} />
                 <Route path="/edit-work/:id" element={<WorkDetails isEditing={true} />} />
+                <Route path="/create-work" element={<WorkDetails isEditing={false} />} />
             </Routes>
         </BrowserRouter>
     );

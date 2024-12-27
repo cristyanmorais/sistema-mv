@@ -27,8 +27,15 @@ const Menu = () => {
         <NavLink to="/installments" className="link" activeClassName="active">Parcelas</NavLink>
       </div>
       <div className='linha' />
-      <div className="div-link">
-        <NavLink to="/register" className="link" activeClassName="active">Cadastro</NavLink>
+      <div className="div-link flyout-container">
+        <p className="link fix">Cadastro</p>
+        <div className="flyout-menu">
+          <NavLink to="/create-city" className="link">Cidades</NavLink>
+          <NavLink to="/create-client" className="link">Clientes</NavLink>
+          <NavLink to="/create-company" className="link">Empresas</NavLink>
+          <NavLink to="/create-employee" className="link">Funcionários</NavLink>
+          <NavLink to="/create-work" className="link">Obras</NavLink>
+        </div>
       </div>
       <div className='linha' />
       <div className="div-link flyout-container">
