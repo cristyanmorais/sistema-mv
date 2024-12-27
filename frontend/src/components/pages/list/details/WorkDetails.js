@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Body } from "../../../Teste";
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
 import { textNumber } from "../../../Functions";
 import Layout from "../../../Layout";
 import ConfirmDialog from "../../../visual-components/ConfirmDialog";
+import "./details.css";
 
 
 export const WorkDetails = ({ isEditing = false }) => {
@@ -198,7 +198,7 @@ export const WorkDetails = ({ isEditing = false }) => {
 
     return (
         <Layout>
-        <Body>
+        <div className="body">
             {/* <h1>{isEditing ? 'Editar Obra' : 'Cadastrar Obra'}</h1> */}
             <div className='field'>
                 <label>Nome:</label>
@@ -296,7 +296,7 @@ export const WorkDetails = ({ isEditing = false }) => {
                 message="Tem certeza de que deseja deletar este obra?"
             />
         </div>
-        </Body>
+        </div>
         </Layout>
     );
 }

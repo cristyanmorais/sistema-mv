@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import styled from 'styled-components';
-
 import './installmentsPage.css';
 import Layout from '../Layout'
 import axios from "axios";
@@ -8,37 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 import { getFormattedDate } from "../Functions";
 import { getTransactionTypeLabel } from "../Functions";
-
-const Body = styled.div`
-        // background-color: darkred;
-        // height: 900px;
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        align-items: center;
-        width: 100%;
-    `;
-
-    const Div = styled.div`
-        // width: 500px;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    `;
-
-    const Table = styled.table`
-        tr:not(.title-row) {
-            cursor: pointer;
-        }
-
-        th {
-            border-bottom: 2px solid #212139;
-        }
-
-        .odd {
-            background-color: lightgrey;
-        }
-    `;
 
 const InstallmentsPage = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -71,7 +38,7 @@ const InstallmentsPage = () => {
 
     return (
         <Layout>
-            <Body>
+            <div className="body">
             <div className="filters-container">
                     <label>
                         Tipo de Transação:
@@ -94,8 +61,8 @@ const InstallmentsPage = () => {
                         </select>
                     </label>
                 </div>
-                <Div>
-                    <Table className="installments-table">
+                <div className="table-container">
+                    <table className="installments-table">
                         <thead>
                             <tr className="title-row">
                                 <th>ID</th>
@@ -116,9 +83,9 @@ const InstallmentsPage = () => {
                                 </tr>
                             ))}
                         </tbody>
-                    </Table>
-                </Div>
-            </Body>
+                    </table>
+                </div>
+            </div>
         </Layout>
     );
 }

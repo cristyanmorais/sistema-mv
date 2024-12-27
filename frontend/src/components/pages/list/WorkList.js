@@ -5,31 +5,6 @@ import Layout from '../../Layout';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`;
-
-const Div = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-`;
-
-const Table = styled.table`
-  tr:not(.title-row) {
-    cursor: pointer;
-  }
-  th {
-    border-bottom: 2px solid #212139;
-  }
-  .odd {
-    background-color: lightgrey;
-  }
-`;
-
 const WorkList = () => {
   const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
   const [works, setWorks] = useState([]);
@@ -70,9 +45,9 @@ const WorkList = () => {
 
   return (
     <Layout>
-      <Body>
-        <Div>
-          <Table className="table">
+      <div className="body">
+        <div>
+          <table className="table">
             <thead>
               <tr className="title-row">
                 <th>ID</th>
@@ -97,9 +72,9 @@ const WorkList = () => {
                 </tr>
               ))}
             </tbody>
-          </Table>
-        </Div>
-      </Body>
+          </table>
+        </div>
+      </div>
     </Layout>
   );
 };

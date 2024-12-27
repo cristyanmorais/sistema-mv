@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styled from 'styled-components';
 
 import Layout from '../Layout'
 import axios from "axios";
 import { getFormattedDate } from "../Functions";
 import { Card, InstCard } from "../VisualComponents";
 import { useNavigate } from "react-router-dom";
-
-const Body = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    align-items: center;
-`
+import './homePage.css';
 
 const HomePage = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -56,7 +49,7 @@ const HomePage = () => {
 
     return (
         <Layout>
-            <Body>
+            <div className="body">
                 <div style={{display: "flex", justifyContent: "space-around", width: "70%"}}>
                     <Card title="Saldo:" content={balance} />
                     <Card title="Entradas:" content={positive} />
@@ -64,7 +57,7 @@ const HomePage = () => {
                 </div>
                 {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} content={getFormattedDate(nextInstallment.due_date)} /> : null}
                 {/* <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p> */}
-            </Body>
+            </div>
         </Layout>
     );
 }

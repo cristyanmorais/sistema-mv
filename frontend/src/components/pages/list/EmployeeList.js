@@ -6,37 +6,6 @@ import Layout from '../../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Body = styled.div`
-        // background-color: darkred;
-        // height: 900px;
-        display: flex;
-        flex-direction: column;
-        // justify-content: center;
-        align-items: center;
-        width: 100%;
-    `;
-
-    const Div = styled.div`
-        // width: 500px;
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    `;
-
-    const Table = styled.table`
-        tr:not(.title-row) {
-            cursor: pointer;
-        }
-
-        th {
-            border-bottom: 2px solid #212139;
-        }
-
-        .odd {
-            background-color: lightgrey;
-        }
-    `;
-
 const EmployeeList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
@@ -55,9 +24,9 @@ const EmployeeList = () => {
 
     return (
         <Layout>
-            <Body>
-                <Div>
-                    <Table className="table">
+            <div className="body">
+                <div>
+                    <table className="table">
                         <thead>
                             <tr className="title-row">
                                 <th>ID</th>
@@ -78,9 +47,9 @@ const EmployeeList = () => {
                                 </tr>
                             ))}
                         </tbody>
-                    </Table>
-                </Div>
-            </Body>
+                    </table>
+                </div>
+            </div>
         </Layout>
     );
 }

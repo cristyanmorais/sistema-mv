@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Body } from "../../../Teste";
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
-import { handlePhoneChange, textNumber } from "../../../Functions";
+import { textNumber } from "../../../Functions";
 import Layout from "../../../Layout";
 import ConfirmDialog from "../../../visual-components/ConfirmDialog";
+import "./details.css";
 
 
 export const CompanyDetails = ({ isEditing = false }) => {
@@ -181,7 +181,7 @@ export const CompanyDetails = ({ isEditing = false }) => {
 
     return (
         <Layout>
-        <Body>
+        <div className="body">
             {/* <h1>{isEditing ? 'Editar Empresa' : 'Cadastrar Empresa'}</h1> */}
             <div className='field'>
                 <label>Nome Real:</label>
@@ -270,7 +270,7 @@ export const CompanyDetails = ({ isEditing = false }) => {
                 message="Tem certeza de que deseja deletar este empresa?"
             />
         </div>
-        </Body>
+        </div>
         </Layout>
     );
 }
