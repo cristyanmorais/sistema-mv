@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllEmployees = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM employees');
+        const result = await db.query('SELECT * FROM employees WHERE is_active = true ORDER BY id desc');
         res.json(result.rows);
 
     } catch (err) {

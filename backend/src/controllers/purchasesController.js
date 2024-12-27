@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllPurchases = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM purchases order by created_at desc');
+        const result = await db.query('SELECT * FROM purchases WHERE is_active = true ORDER BY created_at desc');
         res.json(result.rows);
 
     } catch (err) {

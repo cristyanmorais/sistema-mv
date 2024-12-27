@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllCompanies = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM companies');
+        const result = await db.query('SELECT * FROM companies WHERE is_active = true ORDER BY id desc');
         res.json(result.rows);
 
     } catch (err) {

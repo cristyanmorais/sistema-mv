@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 exports.getAllAddresses = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM addresses order by created_at desc');
+        const result = await db.query('SELECT * FROM addresses WHERE is_active = true ORDER BY created_at desc');
         res.json(result.rows);
 
     } catch (err) {
