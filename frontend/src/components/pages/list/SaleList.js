@@ -6,20 +6,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../../Functions";
 
-const ContractedServiceList = () => {
+const SaleList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [contractedServices, setContractedServices] = useState([]);
+    const [sales, setSales] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/contracted-services`)
-        .then(response => setContractedServices(response.data))
+        axios.get(`${BASE_URL}/api/sales`)
+        .then(response => setSales(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-contracted-service/${id}`);
+        navigate(`/edit-sale/${id}`);
     }
 
     return (
@@ -38,14 +38,14 @@ const ContractedServiceList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {contractedServices.map((contractedService, index) => (
-                                <tr key={contractedService.id} onClick={() => handleRowClick(contractedService.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{contractedService.id}</td>
-                                    <td>{contractedService.description}</td>
-                                    <td>{contractedService.amount}</td>
-                                    <td>{contractedService.date ? getFormattedDate(contractedService.date) : null}</td>
-                                    <td>{contractedService.num_installments}</td>
-                                    <td>{contractedService.paid === true ? "Fechado" : "Aberto"}</td>
+                            {sales.map((sale, index) => (
+                                <tr key={sale.id} onClick={() => handleRowClick(sale.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{sale.id}</td>
+                                    <td>{sale.description}</td>
+                                    <td>{sale.amount}</td>
+                                    <td>{sale.date ? getFormattedDate(sale.date) : null}</td>
+                                    <td>{sale.num_installments}</td>
+                                    <td>{sale.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -56,4 +56,4 @@ const ContractedServiceList = () => {
     );
 }
 
-export default ContractedServiceList;
+export default SaleList;

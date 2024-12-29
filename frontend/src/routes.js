@@ -17,6 +17,12 @@ import WorkList from './components/pages/list/WorkList';
 import CompanyDetails from './components/pages/list/details/CompanyDetails';
 import EmployeeDetails from './components/pages/list/details/EmployeeDetails';
 import WorkDetails from './components/pages/list/details/WorkDetails';
+import ContractedServiceList from './components/pages/list/ContractedServiceList';
+import PayrollList from './components/pages/list/PayrollList';
+import ProvidedServiceList from './components/pages/list/ProvidedServiceList';
+import PurchaseList from './components/pages/list/PurchaseList';
+import SaleList from './components/pages/list/SaleList';
+import TaxList from './components/pages/list/TaxList';
 
 const Router = () => {
     return (
@@ -29,18 +35,31 @@ const Router = () => {
                 <Route path='/installments' Component={InstallmentsPage} />
                 <Route path='/installment-details' Component={Installments} />
 
+                {/* Transações */}
+                <Route path='/contracted-services' Component={ContractedServiceList} />
+                <Route path='/payroll' Component={PayrollList} />
+                <Route path='/provided-services' Component={ProvidedServiceList} />
+                <Route path='/purchases' Component={PurchaseList} />
+                <Route path='/sales' Component={SaleList} />
+                <Route path='/taxes' Component={TaxList} />
+
+                {/* Fixos */}
                 <Route path='/clients' Component={ClientList} />
                 <Route path="/edit-client/:id" element={<ClientDetails isEditing={true} />} />
                 <Route path="/create-client" element={<ClientDetails isEditing={false} />} />
+
                 <Route path='/cities' Component={CityList} />
                 <Route path="/edit-city/:id" element={<CityDetails isEditing={true} />} />
                 <Route path="/create-city" element={<CityDetails isEditing={false} />} />
+                
                 <Route path='/companies' Component={CompanyList} />
                 <Route path="/edit-company/:id" element={<CompanyDetails isEditing={true} />} />
                 <Route path="/create-company" element={<CompanyDetails isEditing={false} />} />
+                
                 <Route path='/employees' Component={EmployeeList} />
                 <Route path="/edit-employee/:id" element={<EmployeeDetails isEditing={true} />} />
                 <Route path="/create-employee" element={<EmployeeDetails isEditing={false} />} />
+                
                 <Route path='/works' Component={WorkList} />
                 <Route path="/edit-work/:id" element={<WorkDetails isEditing={true} />} />
                 <Route path="/create-work" element={<WorkDetails isEditing={false} />} />

@@ -6,20 +6,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../../Functions";
 
-const ContractedServiceList = () => {
+const TaxList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [contractedServices, setContractedServices] = useState([]);
+    const [taxes, setTaxes] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/contracted-services`)
-        .then(response => setContractedServices(response.data))
+        axios.get(`${BASE_URL}/api/taxes`)
+        .then(response => setTaxes(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-contracted-service/${id}`);
+        navigate(`/edit-tax/${id}`);
     }
 
     return (
@@ -38,14 +38,14 @@ const ContractedServiceList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {contractedServices.map((contractedService, index) => (
-                                <tr key={contractedService.id} onClick={() => handleRowClick(contractedService.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{contractedService.id}</td>
-                                    <td>{contractedService.description}</td>
-                                    <td>{contractedService.amount}</td>
-                                    <td>{contractedService.date ? getFormattedDate(contractedService.date) : null}</td>
-                                    <td>{contractedService.num_installments}</td>
-                                    <td>{contractedService.paid === true ? "Fechado" : "Aberto"}</td>
+                            {taxes.map((tax, index) => (
+                                <tr key={tax.id} onClick={() => handleRowClick(tax.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{tax.id}</td>
+                                    <td>{tax.description}</td>
+                                    <td>{tax.amount}</td>
+                                    <td>{tax.date ? getFormattedDate(tax.date) : null}</td>
+                                    <td>{tax.num_installments}</td>
+                                    <td>{tax.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -56,4 +56,4 @@ const ContractedServiceList = () => {
     );
 }
 
-export default ContractedServiceList;
+export default TaxList;

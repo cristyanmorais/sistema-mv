@@ -6,20 +6,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../../Functions";
 
-const ContractedServiceList = () => {
+const PayrollList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [contractedServices, setContractedServices] = useState([]);
+    const [payrolls, setPayrolls] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/contracted-services`)
-        .then(response => setContractedServices(response.data))
+        axios.get(`${BASE_URL}/api/payroll`)
+        .then(response => setPayrolls(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-contracted-service/${id}`);
+        navigate(`/edit-payroll/${id}`);
     }
 
     return (
@@ -38,14 +38,14 @@ const ContractedServiceList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {contractedServices.map((contractedService, index) => (
-                                <tr key={contractedService.id} onClick={() => handleRowClick(contractedService.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{contractedService.id}</td>
-                                    <td>{contractedService.description}</td>
-                                    <td>{contractedService.amount}</td>
-                                    <td>{contractedService.date ? getFormattedDate(contractedService.date) : null}</td>
-                                    <td>{contractedService.num_installments}</td>
-                                    <td>{contractedService.paid === true ? "Fechado" : "Aberto"}</td>
+                            {payrolls.map((payroll, index) => (
+                                <tr key={payroll.id} onClick={() => handleRowClick(payroll.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{payroll.id}</td>
+                                    <td>{payroll.description}</td>
+                                    <td>{payroll.amount}</td>
+                                    <td>{payroll.date ? getFormattedDate(payroll.date) : null}</td>
+                                    <td>{payroll.num_installments}</td>
+                                    <td>{payroll.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -56,4 +56,4 @@ const ContractedServiceList = () => {
     );
 }
 
-export default ContractedServiceList;
+export default PayrollList;

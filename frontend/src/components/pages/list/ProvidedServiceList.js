@@ -6,20 +6,20 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../../Functions";
 
-const ContractedServiceList = () => {
+const ProvidedServiceList = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
     
-    const [contractedServices, setContractedServices] = useState([]);
+    const [providedServices, setProvidedServices] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/api/contracted-services`)
-        .then(response => setContractedServices(response.data))
+        axios.get(`${BASE_URL}/api/provided-services`)
+        .then(response => setProvidedServices(response.data))
         .catch(error => console.error('Error: ', error));
     }, []);
 
     const handleRowClick = (id) => {
-        navigate(`/edit-contracted-service/${id}`);
+        navigate(`/edit-provided-service/${id}`);
     }
 
     return (
@@ -38,14 +38,14 @@ const ContractedServiceList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {contractedServices.map((contractedService, index) => (
-                                <tr key={contractedService.id} onClick={() => handleRowClick(contractedService.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
-                                    <td>{contractedService.id}</td>
-                                    <td>{contractedService.description}</td>
-                                    <td>{contractedService.amount}</td>
-                                    <td>{contractedService.date ? getFormattedDate(contractedService.date) : null}</td>
-                                    <td>{contractedService.num_installments}</td>
-                                    <td>{contractedService.paid === true ? "Fechado" : "Aberto"}</td>
+                            {providedServices.map((providedService, index) => (
+                                <tr key={providedService.id} onClick={() => handleRowClick(providedService.id)} className={index % 2 === 0 ? 'even' : 'odd'}>
+                                    <td>{providedService.id}</td>
+                                    <td>{providedService.description}</td>
+                                    <td>{providedService.amount}</td>
+                                    <td>{providedService.date ? getFormattedDate(providedService.date) : null}</td>
+                                    <td>{providedService.num_installments}</td>
+                                    <td>{providedService.paid === true ? "Fechado" : "Aberto"}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -56,4 +56,4 @@ const ContractedServiceList = () => {
     );
 }
 
-export default ContractedServiceList;
+export default ProvidedServiceList;
