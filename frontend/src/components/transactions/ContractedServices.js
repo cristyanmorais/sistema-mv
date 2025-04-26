@@ -90,6 +90,7 @@ const ContractedServices = () => {
                 if (i > 0) {
                     // A partir do segundo installment, adiciona 30 dias à data
                     dueDate.setDate(dueDate.getDate() + 30);
+                    installmentData.paid = false;
                 }
         
                 // Formata a nova data no formato YYYY-MM-DD

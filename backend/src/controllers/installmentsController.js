@@ -86,23 +86,57 @@ exports.getTransactionValue = async (req, res) => {
 
 // Adicionar Telefone e Email caso necesário
 exports.createInstallment = async (req, res) => {
-    const { transaction_id, transaction_type, installment_amount, due_date, paid, payment_date } = req.body;
-    const query = 'INSERT INTO installments (transaction_id, transaction_type, installment_amount, due_date, paid, payment_date) VALUES ($1, $2, $3, $4, $5, $6);';
-    const values = [transaction_id, transaction_type, installment_amount, due_date, paid, payment_date];
-    try {
-        result = await db.query(query, values);
+    const { transaction_id, transaction_type, amount, num_installments, start_date, paid } = req.body;
 
-        if (result.rowCount !== 1) {
-            console.error('Error while inserting  Installment.');
-            return res.status(500).json({ error: 'Error while inserting  Installment.' });
+    if (!transaction_id || !transaction_type || !amount || !num_installments || !start_date) {
+        return res.status(400).json({ error: 'Missing required fields.' });
+    }
+
+    try {
+        const installments = [];
+        const installmentAmount = amount / num_installments;
+        let dueDate = new Date(start_date);
+
+        for (let i = 0; i < num_installments; i++) {
+            if (i > 0) {
+                dueDate.setDate(dueDate.getDate() + 30); // Adiciona 30 dias para a próxima parcela
+            }
+
+            installments.push({
+                transaction_id,
+                transaction_type,
+                installment_amount: installmentAmount,
+                due_date: dueDate.toISOString().split('T')[0],
+                paid: i === 0 ? paid : false, // Apenas a primeira parcela usa o valor de `paid`
+                payment_date: null, // Opcional: você pode adicionar lógica para definir isso
+            });
         }
 
-        res.status(201).json({ message: ' Installment created!' });
+        // Insere as parcelas no banco de dados
+        const query =
+            'INSERT INTO installments (transaction_id, transaction_type, installment_amount, due_date, paid, payment_date) VALUES ($1, $2, $3, $4, $5, $6);';
 
+        const dbPromises = installments.map((installment) => {
+            const values = [
+                installment.transaction_id,
+                installment.transaction_type,
+                installment.installment_amount,
+                installment.due_date,
+                installment.paid,
+                installment.payment_date,
+            ];
+            return db.query(query, values);
+        });
+
+        await Promise.all(dbPromises);
+
+        res.status(201).json({ message: 'Installments created successfully!', installments });
     } catch (err) {
-        res.status(500).send(err.message);
+        console.error('Error creating installments:', err);
+        res.status(500).json({ error: 'Error creating installments.' });
     }
-}
+};
+
 
 exports.updateInstallment = async (req, res) => {
     const id = req.params.id;

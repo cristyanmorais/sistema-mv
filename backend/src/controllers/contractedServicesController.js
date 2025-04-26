@@ -48,9 +48,14 @@ exports.createContractedService = async (req, res) => {
 
 exports.updateContractedService = async (req, res) => {
     const id = req.params.id;
-    const { employee_id, work_id, amount, description, date, num_installments, paid } = req.body;
+    const { employee_id, work_id, amount, description, date, num_installments, paid, num_installments_changed } = req.body;
     const query = 'UPDATE contracted_services SET employee_id = $1, work_id = $2, amount = $3, description = $4, date = $5, num_installments = $6, paid = $7 WHERE id = $8;';
-    const values = [employee_id, work_id, amount, description, date, id, num_installments, paid];
+    const values = [employee_id, work_id, amount, description, date, num_installments, paid, id];
+    
+    if(num_installments_changed === true) {
+        
+    }
+
     try {
         result = await db.query(query, values);
 

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import './installmentsPage.css';
+import './style/installmentsPage.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import { getFormattedDate } from "../Functions";
-import { getTransactionTypeLabel } from "../Functions";
+import { getFormattedDate, getTransactionTypeLabel } from "../utils/Functions";
 
 const InstallmentsPage = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';

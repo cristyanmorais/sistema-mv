@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
-import './transactionPage.css';
+import './style/transactionPage.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getFormattedDate, getTransactionTypeLabel } from "../Functions";
+import { getFormattedDate, getTransactionTypeLabel } from "../utils/Functions";
 
 
 const Body = styled.div`

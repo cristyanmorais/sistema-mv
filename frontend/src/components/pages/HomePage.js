@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import Layout from '../Layout'
 import axios from "axios";
-import { getFormattedDate } from "../Functions";
-import { Card, InstCard } from "../VisualComponents";
+import { getFormattedDate, formatCurrency } from "../utils/Functions";
+import { Card, InstCard } from "../visual-components/VisualComponents";
 import { useNavigate } from "react-router-dom";
-import './homePage.css';
+import './style/homePage.css';
 
 const HomePage = () => {
     const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
@@ -51,9 +51,9 @@ const HomePage = () => {
         <Layout>
             <div className="body">
                 <div style={{display: "flex", justifyContent: "space-around", width: "70%"}}>
-                    <Card title="Saldo:" content={balance} />
-                    <Card title="Entradas:" content={positive} />
-                    <Card title="Saídas:" content={negative} />
+                    <Card title="Saldo:" content={formatCurrency(balance)} />
+                    <Card title="Entradas:" content={formatCurrency(positive)} />
+                    <Card title="Saídas:" content={formatCurrency(negative)} />
                 </div>
                 {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} content={getFormattedDate(nextInstallment.due_date)} /> : null}
                 {/* <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p> */}

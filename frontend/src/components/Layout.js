@@ -30,11 +30,11 @@ const Menu = () => {
       <div className="div-link flyout-container">
         <p className="link fix">Cadastro</p>
         <div className="flyout-menu">
-          <NavLink to="/create-city" className="link">Cidades</NavLink>
-          <NavLink to="/create-client" className="link">Clientes</NavLink>
-          <NavLink to="/create-company" className="link">Empresas</NavLink>
-          <NavLink to="/create-employee" className="link">Funcionários</NavLink>
-          <NavLink to="/create-work" className="link">Obras</NavLink>
+          <NavLink to="/cities/create" className="link">Cidades</NavLink>
+          <NavLink to="/clients/create" className="link">Clientes</NavLink>
+          <NavLink to="/companies/create" className="link">Empresas</NavLink>
+          <NavLink to="/employees/create" className="link">Funcionários</NavLink>
+          <NavLink to="/works/create" className="link">Obras</NavLink>
         </div>
       </div>
       <div className='linha' />
@@ -56,7 +56,7 @@ const Menu = () => {
 const Layout = ({ children }) => {
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="container">
         <Menu />
         {children}

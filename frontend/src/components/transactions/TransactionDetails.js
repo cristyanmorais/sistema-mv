@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
-import './installment.css';
+import './style/installment.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { getFormattedDate } from "../Functions";
-import { getTransactionTypeLabel } from "../Functions";
+import { getFormattedDate, getTransactionTypeLabel } from "../utils/Functions";
 
 const Body = styled.div`
         // background-color: darkred;

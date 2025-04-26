@@ -1,5 +1,5 @@
 import React from "react";
-import "./confirmDialog.css"; // Importa o arquivo CSS para estilização
+import "./style/confirmDialog.css"; // Importa o arquivo CSS para estilização
 
 const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
     if (!isOpen) return null;

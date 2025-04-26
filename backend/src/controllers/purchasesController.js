@@ -49,7 +49,7 @@ exports.createPurchase = async (req, res) => {
 exports.updatePurchase = async (req, res) => {
     const id = req.params.id;
     const { company_id, amount, description, date, num_installments, paid } = req.body;
-    const query = 'UPDATE payroll SET company_id = $1, amount = $2, description = $3, date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
+    const query = 'UPDATE purchases SET company_id = $1, amount = $2, description = $3, date = $4, num_installments = $5, paid = $6 WHERE id = $7;';
     const values = [ company_id, amount, description, date, num_installments, paid, id];
     try {
         result = await db.query(query, values);
