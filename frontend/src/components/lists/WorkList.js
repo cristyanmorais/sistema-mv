@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const WorkList = () => {
-  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
   const [works, setWorks] = useState([]);
   const [clients, setClients] = useState({}); // Armazena os nomes dos clientes por ID
   const navigate = useNavigate();

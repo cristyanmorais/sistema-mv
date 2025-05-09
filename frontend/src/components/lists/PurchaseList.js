@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getFormattedDate } from "../utils/Functions";
 
 const PurchaseList = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     
     const [purchases, setPurchases] = useState([]);
     const navigate = useNavigate();

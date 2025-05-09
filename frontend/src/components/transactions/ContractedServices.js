@@ -4,7 +4,7 @@ import { Body } from '../Teste';
 import Installment from '../InstallmentField';
 
 const ContractedServices = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [employeeId, setEmployeeId] = useState(0);
     const [workId, setWorkId] = useState(0);
     const [amount, setAmount] = useState('');

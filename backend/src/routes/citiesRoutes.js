@@ -1,11 +1,12 @@
-const express = require('express');
+import express from 'express';
+import * as citiesController from '../controllers/citiesController';
+
 const router = express.Router();
-const citiesController = require('../controllers/citiesController');
 
 router.get('/', citiesController.getAllCities);
 router.get('/:id', citiesController.getCityById);
 router.post('/', citiesController.createCity);
 router.put('/:id', citiesController.updateCity);
-router.put('/:id/delete', citiesController.deleteCity);
+router.delete('/:id', citiesController.deleteCity);
 
-module.exports = router;
+export default router;

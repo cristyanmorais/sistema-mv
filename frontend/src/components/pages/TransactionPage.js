@@ -63,7 +63,7 @@ const Body = styled.div`
     `;
 
 const TransactionPage = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [selectedType, setSelectedType] = useState('');
     const [transactions, setTransactions] = useState([]);
 

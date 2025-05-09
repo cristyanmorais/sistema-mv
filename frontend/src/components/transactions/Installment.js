@@ -15,7 +15,7 @@ const Body = styled.div`
     `;
 
 const Installment = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const location = useLocation();
     const installmentId = location.state?.id;
     const [amount, setAmount] = useState(0);

@@ -5,7 +5,7 @@ import Layout from '../../Layout';
 import ConfirmDialog from '../../visual-components/ConfirmDialog';
 
 const ContractedServiceDetails = ({ isEditing = false }) => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const navigate = useNavigate();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 

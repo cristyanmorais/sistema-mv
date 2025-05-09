@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Body } from '../Teste';
 
 const Purchases = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [companyId, setCompanyId] = useState(0);
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState('');

@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import './style/homePage.css';
 
 const HomePage = () => {
-    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+    const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
     const [balance, setBalance] = useState(0);
     const [positive, setPositive] = useState(0);
     const [negative, setNegative] = useState(0);
