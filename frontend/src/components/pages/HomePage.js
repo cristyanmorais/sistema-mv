@@ -36,7 +36,7 @@ const HomePage = () => {
     }
 
     const fetchTransactions = () => {
-        axios.get('http://192.168.1.246:3000/api/cash-register/transactions')
+        axios.get(`${BASE_URL}/api/cash-register/transactions`)
         .then(response => {
             setPositive(response.data.positive);
             setNegative(response.data.negative);
@@ -45,7 +45,7 @@ const HomePage = () => {
     }
 
     const fetchNextInstallment = () => {
-        axios.get('http://192.168.1.246:3000/api/installments/next')
+        axios.get(`${BASE_URL}/api/installments/next`)
         .then(response => {setNextInstallment(response.data); console.log(response.data)})
         .catch(error => console.error('Error: ', error));
     }
