@@ -10,11 +10,12 @@ export const Card = ({ title, content }) => {
     )
 }
 
-export const InstCard = ({ onClick, content }) => {
+export const InstCard = ({ onClick, content, date }) => {
     return (
         <div className='inst-card' onClick={onClick}>
-            <p>Próxima Parcela:</p>
+            <h1>Próxima Parcela:</h1>
             <p>{content}</p>
+            <p>{date}</p>
         </div>
     )
 }

@@ -1,13 +1,14 @@
 .card {
     display: flex;
-    background-color: #212139;
-    width: 220px;
-    height: 220px;
-    border-radius: 30px;
+    background-color: #000050;
+    min-width: 300px;
+    width: 60%;
+    height: 150px;
+    border-radius: 20px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 50px;
+    margin-top: 40px;
     /* margin-left: 10px; */
 }
 
@@ -19,13 +20,13 @@
 }
 
 .inst-card {
-    background-color: #e0c858;
-    width: 300px;
-    height: 120px;
+    background-color: #c9ad0d;
+    width: 250px;
+    height: 250px;
     border-radius: 30px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     margin-top: 50px;
     cursor: pointer;
@@ -33,12 +34,22 @@
 }
 
 .inst-card:hover {
-    background-color: #ffd51b;
+    background-color: #a8910b;
 }
 
 .inst-card p {
     margin: 0;
     font-size: 30px;
-    font-weight: bold;
-    color: #212139;
+    font-weight: 500;
+    color: #ffffff;
+    width: 90%;
+    text-align: center;
+}
+
+.inst-card h1 {
+    margin: 0;
+    color: #fff;
+    width: 90%;
+    text-align: center;
+    font-size: 35px;
 }

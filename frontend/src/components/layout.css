@@ -1,6 +1,10 @@
+.container {
+    padding-left: 250px;
+}
+
 .menu {
     background-color: #212139;
-    width: 200px;
+    width: 250px;
     height: 100%;
 
     display: flex;

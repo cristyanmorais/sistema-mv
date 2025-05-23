@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 
+import './homePage.css';
 import Layout from '../Layout'
 import axios from "axios";
 import { getFormattedDate } from "../Functions";
@@ -56,15 +57,15 @@ const HomePage = () => {
 
     return (
         <Layout>
-            <Body>
-                <div style={{display: "flex", justifyContent: "space-around", width: "70%"}}>
+            <div className="homePage">
+                <div className="cards">
                     <Card title="Saldo:" content={balance} />
-                    <Card title="Entradas:" content={positive} />
-                    <Card title="Saídas:" content={negative} />
+                    <Card title="Entradas:" content={positive.toFixed(2)} />
+                    <Card title="Saídas:" content={negative.toFixed(2)} />
                 </div>
-                {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} content={getFormattedDate(nextInstallment.due_date)} /> : null}
+                {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} date={getFormattedDate(nextInstallment.due_date)} content={nextInstallment.transaction_type} /> : null}
                 {/* <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p> */}
-            </Body>
+            </div>
         </Layout>
     );
 }
