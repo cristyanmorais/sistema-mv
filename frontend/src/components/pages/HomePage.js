@@ -55,6 +55,25 @@ const HomePage = () => {
         navigate('/installment-details', {state: { id }});
     }
 
+    const handleMonthlyReport = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/api/reports/monthly`, {
+                responseType: 'blob'
+            });
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `relatorio_mensal_${new Date().toLocaleDateString()}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } catch (error) {
+            console.error('Erro ao gerar relatório:', error);
+            alert('Erro ao gerar o relatório mensal');
+        }
+    }
+
     return (
         <Layout>
             <div className="homePage">
@@ -63,8 +82,10 @@ const HomePage = () => {
                     <Card title="Entradas:" content={positive.toFixed(2)} />
                     <Card title="Saídas:" content={negative.toFixed(2)} />
                 </div>
+                <div className="clickables">
                 {nextInstallment.due_date ? <InstCard onClick={() => handleInstClick(nextInstallment.id)} date={getFormattedDate(nextInstallment.due_date)} content={nextInstallment.transaction_type} /> : null}
-                {/* <p>Próxima Parcela: {nextInstallment.due_date ? getFormattedDate(nextInstallment.due_date) : null}</p> */}
+                <button className="reportButton" onClick={handleMonthlyReport}>Gerar Relatório Mensal</button>
+                </div>
             </div>
         </Layout>
     );
