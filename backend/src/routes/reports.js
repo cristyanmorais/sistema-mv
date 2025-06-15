@@ -5,8 +5,14 @@ const db = require('../config/db');
 
 router.get('/monthly', async (req, res) => {
     try {
+        const { startDate, endDate } = req.query;
+
+        if (!startDate || !endDate) {
+            return res.status(400).json({ error: 'Datas de início e fim são obrigatórias' });
+        }
+
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Relatório Mensal');
+        const worksheet = workbook.addWorksheet('Relatório');
 
         // Mapeamento dos tipos de transação para português
         const transactionTypes = {
@@ -33,11 +39,6 @@ router.get('/monthly', async (req, res) => {
         worksheet.getRow(1).font = { bold: true };
         worksheet.getRow(1).alignment = { vertical: 'middle', horizontal: 'center' };
 
-        // Obter o primeiro e último dia do mês atual
-        const now = new Date();
-        const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-        const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
         // Função para buscar transações de uma tabela específica
         const fetchTransactions = async (tableName) => {
             const query = `
@@ -62,7 +63,7 @@ router.get('/monthly', async (req, res) => {
                     (t.num_installments = 1 AND t.date BETWEEN $1 AND $2)
                 )
             `;
-            return await db.query(query, [firstDay, lastDay]);
+            return await db.query(query, [startDate, endDate]);
         };
 
         // Buscar transações de todas as tabelas
@@ -136,7 +137,7 @@ router.get('/monthly', async (req, res) => {
         rowTotalSaidas.getCell('valor').alignment = { horizontal: 'right' };
 
         const rowSaldoMensal = worksheet.getRow(4);
-        rowSaldoMensal.getCell('resumo').value = 'Saldo Mensal';
+        rowSaldoMensal.getCell('resumo').value = 'Saldo do Período';
         rowSaldoMensal.getCell('valor').value = (totalEntradas - totalSaidas).toFixed(2);
         rowSaldoMensal.getCell('resumo').font = { bold: true };
         rowSaldoMensal.getCell('valor').font = { bold: true };
@@ -158,7 +159,7 @@ router.get('/monthly', async (req, res) => {
         );
         res.setHeader(
             'Content-Disposition',
-            'attachment; filename=relatorio_mensal.xlsx'
+            'attachment; filename=relatorio.xlsx'
         );
 
         // Enviar arquivo
